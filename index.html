@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PayrollGM</title>
+  <meta name="description" content="PayrollGM — your hub for the baseball scorer, dynasty fantasy football rankings, and marbles game room." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-2: #131a31;
+      --card: #1a2342;
+      --card-hover: #222d54;
+      --text: #f5f7ff;
+      --muted: #9aa6cc;
+      --accent: #5b8cff;
+      --border: #2a355e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(1200px 600px at 50% -10%, #1c2750 0%, var(--bg) 60%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .logo {
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(90deg, #fff, var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .tagline {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-top: 12px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 920px;
+    }
+    .card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 18px;
+      padding: 28px 26px;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      background: var(--card-hover);
+      border-color: var(--accent);
+    }
+    .icon {
+      font-size: 2.4rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .card h2 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .port {
+      display: inline-block;
+      margin-top: 18px;
+      font-size: 0.8rem;
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    footer {
+      margin-top: 48px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">PayrollGM</div>
+    <p class="tagline">Pick where you want to go.</p>
+  </header>
+
+  <main class="grid" id="grid">
+    <a class="card" data-port="1402" href="#">
+      <span class="icon">⚾</span>
+      <h2>Baseball Scorer</h2>
+      <p>Score games on the go from your phone or the dugout.</p>
+      <span class="port">Score &rarr;</span>
+    </a>
+
+    <a class="card" data-port="3000" href="#">
+      <span class="icon">🏈</span>
+      <h2>Dynasty Rankings</h2>
+      <p>Dynasty fantasy football rankings, updated and ready.</p>
+      <span class="port">Rank &rarr;</span>
+    </a>
+
+    <a class="card" data-port="8088" href="#">
+      <span class="icon">🔮</span>
+      <h2>Marbles Game Room</h2>
+      <p>Jump into the marbles game room and play.</p>
+      <span class="port">Play &rarr;</span>
+    </a>
+  </main>
+
+  <footer>By Travis Johnson</footer>
+
+  <script>
+    // Build links from the current hostname so this works on localhost
+    // and on payrollgm.com without any edits.
+    const host = window.location.hostname || 'localhost';
+    const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+    document.querySelectorAll('.card[data-port]').forEach(function (card) {
+      const port = card.getAttribute('data-port');
+      card.href = protocol + '//' + host + ':' + port;
+    });
+  </script>
+</body>
+</html>
