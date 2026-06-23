@@ -110,21 +110,21 @@
   </header>
 
   <main class="grid" id="grid">
-    <a class="card" data-port="1402" href="#">
+    <a class="card" data-port="1402" data-sub="scorer" href="#">
       <span class="icon">⚾</span>
       <h2>Baseball Scorer</h2>
       <p>Score games on the go from your phone or the dugout.</p>
       <span class="port">Score &rarr;</span>
     </a>
 
-    <a class="card" data-port="3000" href="#">
+    <a class="card" data-port="3000" data-sub="dynasty" href="#">
       <span class="icon">🏈</span>
       <h2>Dynasty Rankings</h2>
       <p>Dynasty fantasy football rankings, updated and ready.</p>
       <span class="port">Rank &rarr;</span>
     </a>
 
-    <a class="card" data-port="8088" href="#">
+    <a class="card" data-port="8088" data-sub="marbles" href="#">
       <span class="icon">🔮</span>
       <h2>Marbles Game Room</h2>
       <p>Jump into the marbles game room and play.</p>
@@ -135,13 +135,23 @@
   <footer>By Travis Johnson</footer>
 
   <script>
-    // Build links from the current hostname so this works on localhost
-    // and on payrollgm.com without any edits.
+    // Links adapt to where the page is loaded:
+    //  - Locally (file:// or localhost)  -> http://localhost:<port>
+    //  - In production (a real domain)   -> https://<sub>.<domain>
+    // The Caddy reverse proxy maps both subdomains and subpaths to the apps.
     const host = window.location.hostname || 'localhost';
-    const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+    const isLocal = host === 'localhost' || host === '127.0.0.1' || host === '';
+
     document.querySelectorAll('.card[data-port]').forEach(function (card) {
       const port = card.getAttribute('data-port');
-      card.href = protocol + '//' + host + ':' + port;
+      const sub = card.getAttribute('data-sub');
+      if (isLocal) {
+        card.href = 'http://localhost:' + port;
+      } else {
+        // strip any leading "www." so subdomains build cleanly
+        const domain = host.replace(/^www\./, '');
+        card.href = 'https://' + sub + '.' + domain;
+      }
     });
   </script>
 </body>

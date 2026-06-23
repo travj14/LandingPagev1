@@ -1,0 +1,37 @@
+# Caddyfile for payrollgm.com
+# Place this on the Contabo server at /etc/caddy/Caddyfile
+# Caddy auto-provisions HTTPS certs for every domain/subdomain listed here.
+
+# ---- Landing page (root domain) ----
+payrollgm.com, www.payrollgm.com {
+	root * /var/www/payrollgm
+	file_server
+
+	# ---- Subpath access ----
+	# payrollgm.com/scorer  /dynasty  /marbles
+	# NOTE: the Node app must support running under a base path for its
+	# own internal links/assets to resolve. Subdomains (below) avoid this.
+	handle_path /scorer* {
+		reverse_proxy localhost:1402
+	}
+	handle_path /dynasty* {
+		reverse_proxy localhost:3000
+	}
+	handle_path /marbles* {
+		reverse_proxy localhost:8088
+	}
+}
+
+# ---- Subdomain access (recommended) ----
+# Each app is served at the root of its own subdomain, so no app changes needed.
+scorer.payrollgm.com {
+	reverse_proxy localhost:1402
+}
+
+dynasty.payrollgm.com {
+	reverse_proxy localhost:3000
+}
+
+marbles.payrollgm.com {
+	reverse_proxy localhost:8088
+}
