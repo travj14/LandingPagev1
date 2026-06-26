@@ -130,6 +130,13 @@
       <p>Jump into the marbles game room and play.</p>
       <span class="port">Play &rarr;</span>
     </a>
+
+    <a class="card" data-port="4173" data-path="/fighter" href="#">
+      <span class="icon">🪖</span>
+      <h2>Plane Fighter</h2>
+      <p>Take the field as a ground soldier and shoot down the planes.</p>
+      <span class="port">Fight &rarr;</span>
+    </a>
   </main>
 
   <footer>By Travis Johnson</footer>
@@ -145,8 +152,13 @@
     document.querySelectorAll('.card[data-port]').forEach(function (card) {
       const port = card.getAttribute('data-port');
       const sub = card.getAttribute('data-sub');
+      const path = card.getAttribute('data-path');
       if (isLocal) {
         card.href = 'http://localhost:' + port;
+      } else if (path) {
+        // subpath on the root domain, e.g. payrollgm.com/fighter
+        const domain = host.replace(/^www\./, '');
+        card.href = 'https://' + domain + path;
       } else {
         // strip any leading "www." so subdomains build cleanly
         const domain = host.replace(/^www\./, '');
