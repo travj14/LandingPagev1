@@ -20,9 +20,6 @@ payrollgm.com, www.payrollgm.com {
 	handle_path /marbles* {
 		reverse_proxy localhost:8088
 	}
-	handle_path /fighter* {
-		reverse_proxy localhost:4173
-	}
 }
 
 # ---- Subdomain access (recommended) ----
@@ -37,4 +34,8 @@ dynasty.payrollgm.com {
 
 marbles.payrollgm.com {
 	reverse_proxy localhost:8088
+}
+
+fighter.payrollgm.com {
+	reverse_proxy localhost:4173
 }
