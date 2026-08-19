@@ -1,0 +1,45 @@
+#!/usr/bin/env sh
+set -eu
+
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+CADDYFILE="${CADDYFILE:-$SCRIPT_DIR/Caddyfile}"
+LANDING_ROOT="${LANDING_ROOT:-/var/www/payrollgm}"
+SYSTEM_CADDYFILE="${SYSTEM_CADDYFILE:-/etc/caddy/Caddyfile}"
+
+need_cmd() {
+	if ! command -v "$1" >/dev/null 2>&1; then
+		echo "Missing required command: $1" >&2
+		exit 1
+	fi
+}
+
+run_privileged() {
+	if [ "$(id -u)" -eq 0 ]; then
+		"$@"
+	else
+		sudo "$@"
+	fi
+}
+
+sync_landing_page() {
+	run_privileged mkdir -p "$LANDING_ROOT"
+	run_privileged cp "$SCRIPT_DIR/index.html" "$LANDING_ROOT/index.html"
+}
+
+has_system_caddy() {
+	command -v systemctl >/dev/null 2>&1 && systemctl list-unit-files caddy.service >/dev/null 2>&1
+}
+
+need_cmd caddy
+sync_landing_page
+caddy validate --config "$CADDYFILE"
+
+if has_system_caddy; then
+	run_privileged cp "$CADDYFILE" "$SYSTEM_CADDYFILE"
+	run_privileged systemctl reload-or-restart caddy
+	echo "Landing page restarted with system Caddy service."
+else
+	caddy stop >/dev/null 2>&1 || true
+	caddy start --config "$CADDYFILE"
+	echo "Landing page restarted with local Caddy process."
+fi
