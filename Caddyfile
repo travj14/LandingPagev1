@@ -8,7 +8,7 @@ payrollgm.com, www.payrollgm.com {
 	file_server
 
 	# ---- Subpath access ----
-	# payrollgm.com/scorer  /dynasty  /marbles
+	# payrollgm.com/scorer  /dynasty  /draftbuddy  /marbles
 	# NOTE: the Node app must support running under a base path for its
 	# own internal links/assets to resolve. Subdomains (below) avoid this.
 	handle_path /scorer* {
@@ -16,6 +16,9 @@ payrollgm.com, www.payrollgm.com {
 	}
 	handle_path /dynasty* {
 		reverse_proxy localhost:3000
+	}
+	handle_path /draftbuddy* {
+		reverse_proxy localhost:8899
 	}
 	handle_path /marbles* {
 		reverse_proxy localhost:8088
@@ -30,6 +33,10 @@ scorer.payrollgm.com {
 
 dynasty.payrollgm.com {
 	reverse_proxy localhost:3000
+}
+
+draftbuddy.payrollgm.com {
+	reverse_proxy localhost:8899
 }
 
 marbles.payrollgm.com {
