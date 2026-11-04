@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b1020" />
+    <title>Booty Lickers Unite</title>
+    <meta name="description" content="Standings, playoff odds, records and history for the Booty Lickers Unite Sleeper dynasty league." />
+    <link rel="stylesheet" href="/site.css" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="BLU" />
+    <!-- Link previews (group chats, iMessage, Discord). %ORIGIN% is filled in by the server. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Booty Lickers Unite" />
+    <meta property="og:title" content="Booty Lickers Unite" />
+    <meta property="og:description" content="Standings, playoff odds, records and history for our Sleeper dynasty league." />
+    <meta property="og:url" content="%ORIGIN%/" />
+    <meta property="og:image" content="%ORIGIN%/icons/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <div class="app" id="app">
+      <header class="topbar">
+        <a class="brand" href="#home" id="brand">League</a>
+        <span class="week-chip" id="weekChip"></span>
+        <button class="icon-btn" id="openSettings" aria-label="Settings" title="Settings">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.4-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3.3h-4l-.4 2.7a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.4L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.4 2.5-1a7.4 7.4 0 0 0 1.7 1l.4 2.7h4l.4-2.7a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.4zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z"/></svg>
+        </button>
+      </header>
+
+      <div class="offline-bar" id="offlineBar" role="status" hidden>You're offline · showing saved data</div>
+      <main id="view" class="view" tabindex="-1"></main>
+      <footer class="site-foot" id="siteFoot"></footer>
+
+      <nav class="tabbar" id="tabbar" aria-label="Sections">
+        <a href="#home" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7v9h-6v-6H9v6H3z"/></svg><span>Home</span></a>
+        <a href="#standings" data-tab="standings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10h4v10zm6 0V4h4v16zm6 0v-7h4v7z"/></svg><span>Standings</span></a>
+        <a href="#matchups" data-tab="matchups"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h4v4H7zm6 12h4v4h-4zM5 10h14v4H5z"/></svg><span>Matchups</span></a>
+        <a href="#teams" data-tab="teams"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm-7 9a7 7 0 0 1 14 0zm15-9a3 3 0 1 0 0-6v6zm1 9h4a6 6 0 0 0-5.3-6 8.5 8.5 0 0 1 1.3 6z"/></svg><span>Teams</span></a>
+        <a href="#history" data-tab="history"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v3a5 5 0 0 1-10 0zm-4 1h3v3a3 3 0 0 1-3-3zm18 0h-3v3a3 3 0 0 0 3-3zM10 13h4v4h3v4H7v-4h3z"/></svg><span>History</span></a>
+      </nav>
+    </div>
+
+    <div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
+    <section class="sheet" id="settingsSheet" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" hidden>
+      <div class="sheet-grip" aria-hidden="true"></div>
+      <div class="sheet-head">
+        <h2 id="settingsTitle">Settings</h2>
+        <button class="text-btn" id="closeSettings">Done</button>
+      </div>
+      <div id="settingsBody"></div>
+    </section>
+
+    <script type="module" src="/js/main.js"></script>
+  </body>
+</html>

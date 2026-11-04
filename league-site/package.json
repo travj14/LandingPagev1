@@ -1,0 +1,26 @@
+{
+  "name": "blu-league-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Live league site for the Booty Lickers Unite Sleeper dynasty league",
+  "scripts": {
+    "start": "node server/site.ts",
+    "dev": "node --watch server/site.ts",
+    "refresh": "node server/refresh-cli.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=23.6"
+  },
+  "dependencies": {
+    "compression": "^1.8.1",
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.8.1",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2"
+  }
+}

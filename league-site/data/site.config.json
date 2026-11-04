@@ -1,0 +1,19 @@
+{
+  "siteTitle": "Booty Lickers Unite",
+  "theme": "Midnight",
+  "apple": true,
+  "smoothScroll": true,
+  "glide": 0.45,
+  "reveal": true,
+  "model": "coin",
+  "sampleSize": 8,
+  "offseasonWeight": 0.5,
+  "tradeDeadline": "2026-11-26T13:00:00-05:00",
+  "rookieDraft": null,
+  "pool": {
+    "ticker": "VOO",
+    "buyPrice": 564.07,
+    "invested": 350,
+    "shares": null
+  }
+}

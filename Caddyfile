@@ -3,27 +3,49 @@
 # Caddy auto-provisions HTTPS certs for every domain/subdomain listed here.
 
 # ---- Landing page (root domain) ----
+# The league site (league-site/, Node on port 3457) is the main page.
+# /scorer, /dynasty, /draftbuddy, /marbles and the recap pages are matched first, in the order below.
 payrollgm.com, www.payrollgm.com {
 	root * /var/www/payrollgm
-	@week8recap path /week8recap /week8recap/
-	rewrite @week8recap /week8recap.html
-	file_server
 
-	# ---- Subpath access ----
-	# payrollgm.com/scorer  /dynasty  /draftbuddy  /marbles
-	# NOTE: the Node app must support running under a base path for its
-	# own internal links/assets to resolve. Subdomains (below) avoid this.
-	handle_path /scorer* {
-		reverse_proxy localhost:1402
+	# The old week 8 links redirect to the recaps folder so links already shared keep working.
+	@oldWeek8 path /week8recap /week8recap/ /week8recap.html
+	redir @oldWeek8 /recaps/week8recap.html permanent
+
+	# Recap pages in /var/www/payrollgm/recaps: payrollgm.com/recaps/week8recap(.html)
+	@recapPage {
+		path /recaps/*
+		file {path} {path}.html
 	}
-	handle_path /dynasty* {
-		reverse_proxy localhost:3000
-	}
-	handle_path /draftbuddy* {
-		reverse_proxy localhost:8899
-	}
-	handle_path /marbles* {
-		reverse_proxy localhost:8088
+
+	# `route` runs these top to bottom; the first match answers.
+	route {
+		# ---- Subpath access ----
+		# payrollgm.com/scorer  /dynasty  /draftbuddy  /marbles
+		# NOTE: the Node app must support running under a base path for its
+		# own internal links/assets to resolve. Subdomains (below) avoid this.
+		handle_path /scorer* {
+			reverse_proxy localhost:1402
+		}
+		handle_path /dynasty* {
+			reverse_proxy localhost:3000
+		}
+		handle_path /draftbuddy* {
+			reverse_proxy localhost:8899
+		}
+		handle_path /marbles* {
+			reverse_proxy localhost:8088
+		}
+
+		handle @recapPage {
+			try_files {path} {path}.html
+			file_server
+		}
+
+		# Everything else: the league site.
+		handle {
+			reverse_proxy localhost:3457
+		}
 	}
 }
 
