@@ -5,6 +5,8 @@
 # ---- Landing page (root domain) ----
 payrollgm.com, www.payrollgm.com {
 	root * /var/www/payrollgm
+	@week8recap path /week8recap /week8recap/
+	rewrite @week8recap /week8recap.html
 	file_server
 
 	# ---- Subpath access ----

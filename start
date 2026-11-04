@@ -24,6 +24,7 @@ run_privileged() {
 sync_landing_page() {
 	run_privileged mkdir -p "$LANDING_ROOT"
 	run_privileged cp "$SCRIPT_DIR/index.html" "$LANDING_ROOT/index.html"
+	run_privileged cp "$SCRIPT_DIR/week8recap.html" "$LANDING_ROOT/week8recap.html"
 }
 
 has_system_caddy() {
