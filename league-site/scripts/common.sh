@@ -12,6 +12,12 @@ if [[ -f .env ]]; then
   set +a
 fi
 
+# NODE_DIR: a Node install just for this site (its bin/ folder goes first on PATH for these scripts only),
+# so the server's system Node, used by other apps, can stay as it is.
+if [[ -n "${NODE_DIR:-}" ]]; then
+  export PATH="$NODE_DIR/bin:$PATH"
+fi
+
 PORT="${PORT:-3457}"
 SERVER_ENTRY="${SERVER_ENTRY:-server/site.ts}"
 PID_FILE="$ROOT/data/run/server.pid"
