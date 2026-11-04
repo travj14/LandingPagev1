@@ -403,14 +403,55 @@ small { font-size: 0.66em; color: var(--muted); }
 .mpage .pk-top b { order: 2; flex-basis: 100%; }
 .mpage .pk-no { order: 1; }
 
+/* ============ Apple style (page setting) ============
+   Same layout and colors, with iOS materials: frosted cards, hairline separators,
+   continuous corners, softer headers and springy press feedback. */
+.mpage.apple { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; letter-spacing: -0.008em; }
+.mpage.apple .mblk {
+  background: color-mix(in srgb, var(--card) 74%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  backdrop-filter: blur(24px) saturate(170%);
+  border: 0.5px solid color-mix(in srgb, var(--text) 10%, transparent);
+  border-radius: calc(var(--radius) * 1.25);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.06), 0 8px 24px -12px rgba(0, 0, 0, 0.35);
+  transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2), box-shadow 0.35s ease;
+}
+.mpage.apple .mblk.no-card { background: transparent; border-color: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.mpage.apple details.mblk:active, .mpage.apple .mbtn:active, .mpage.apple .acc summary:active { transform: scale(0.975); }
+.mpage.apple .blk-title { letter-spacing: 0.06em; font-weight: 700; }
+.mpage.apple .blk-title::before { width: 0.9em; border-radius: 99px; }
+.mpage.apple .tbl td, .mpage.apple .acc, .mpage.apple .mu, .mpage.apple .mw-lines td, .mpage.apple .mw-lines th {
+  border-top-width: 0.5px;
+  border-top-color: color-mix(in srgb, var(--text) 13%, transparent);
+}
+.mpage.apple .mbtn { border-radius: 999px; transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2), filter 0.2s; }
+.mpage.apple .mbtns.filled .mbtn:active { filter: brightness(0.9); }
+.mpage.apple .stat, .mpage.apple .pos-card, .mpage.apple .trade, .mpage.apple .records li { border-radius: calc(var(--radius) * 0.8); }
+.mpage.apple .pk { border-radius: 0.75em; }
+.mpage.apple .acc summary { transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+.mpage.apple .acc summary::after { content: "›"; font-size: 1.3em; line-height: 0.8; transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+.mpage.apple .acc[open] summary::after { content: "›"; transform: rotate(90deg); }
+.mpage.apple details.mblk > summary::after { content: "›"; transform: rotate(90deg); transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+.mpage.apple details.mblk:not([open]) > summary::after { transform: rotate(0deg); }
+.mpage.apple .mnav { background: color-mix(in srgb, var(--bg) 70%, transparent); -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%); border-bottom: 0.5px solid color-mix(in srgb, var(--text) 12%, transparent); }
+.mpage.apple .mnav a { font-weight: 600; background: color-mix(in srgb, var(--text) 8%, transparent); transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+.mpage.apple .mnav a:active { transform: scale(0.94); }
+.mpage.apple .odds { border-radius: 99px; }
+
+/* Fade-in on scroll (page setting; the exported page's script adds .rv / .in) */
+.mpage.reveal .mblk.rv { opacity: 0; transform: translateY(18px) scale(0.985); transition: opacity 0.7s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+.mpage.reveal .mblk.rv.in { opacity: 1; transform: none; }
+/* Apple style: colored text lines ("(red) …") get a faint glow of their own color when the section has no card */
+.mpage.apple .mblk.no-card .tc { text-shadow: 0 0 12px color-mix(in srgb, var(--tc) 30%, transparent), 0 0 2px color-mix(in srgb, var(--tc) 18%, transparent); }
+
 </style>
 </head>
 <body>
-<div class="mpage bg-glow" style="--base:16px;--radius:16px;--gap:12px;--pad:14px;--maxw:560px;--font:-apple-system, BlinkMacSystemFont, SF Pro Display, Segoe UI, Roboto, Helvetica, Arial, sans-serif;--hfont:-apple-system, BlinkMacSystemFont, SF Pro Display, Segoe UI, Roboto, Helvetica, Arial, sans-serif;--bg:#0b1020;--bg2:#1b2a55;--card:#141b31;--text:#f3f5fb;--muted:#93a0bf;--accent:#f5b83d;--accent2:#4fd1c5;--good:#4ade80;--bad:#f87171"><main class="mpage-inner"><section id="s-hwja7i8k" class="blk mblk blk-hero no-card" style="--scale:1"><div class="blk-body"><div class="hero align-left">
+<div class="mpage bg-glow apple reveal" style="--base:16px;--radius:16px;--gap:12px;--pad:14px;--maxw:560px;--font:-apple-system, BlinkMacSystemFont, SF Pro Display, Segoe UI, Roboto, Helvetica, Arial, sans-serif;--hfont:-apple-system, BlinkMacSystemFont, SF Pro Display, Segoe UI, Roboto, Helvetica, Arial, sans-serif;--bg:#0b1020;--bg2:#1b2a55;--card:#141b31;--text:#f3f5fb;--muted:#93a0bf;--accent:#f5b83d;--accent2:#4fd1c5;--good:#4ade80;--bad:#f87171"><main class="mpage-inner"><section id="s-hwja7i8k" class="blk mblk blk-hero no-card" style="--scale:1"><div class="blk-body"><div class="hero align-left">
         <div class="hdr-kicker">Booty Lickers Unite · 2026</div>
         <div class="hero-h" style="--hs:1">Weekly Recap</div>
         <div class="hdr-sub">Week 8</div>
-      </div></div></section><section id="s-xzxyg1uu" class="blk mblk blk-pool half" style="--scale:1"><h2 class="blk-title">The Pool</h2><div class="blk-body"><div class="pool"><div class="pool-amt">$430.33</div><div class="pool-sub">up $80.33 since the 2025 Startup draft</div></div></div></section><section id="s-bhg3tfmt" class="blk mblk blk-deadline half" style="--scale:1"><h2 class="blk-title">Trade Deadline</h2><div class="blk-body"><div class="deadline"><div class="dl-big" data-deadline="2026-11-26T13:00:00-05:00">22d 16h 9m</div>
+      </div></div></section><section id="s-xzxyg1uu" class="blk mblk blk-pool half" style="--scale:1"><h2 class="blk-title">The Pool</h2><div class="blk-body"><div class="pool"><div class="pool-amt">$430.33</div><div class="pool-sub">up $80.33 since the 2025 Startup draft</div></div></div></section><section id="s-bhg3tfmt" class="blk mblk blk-deadline half" style="--scale:1"><h2 class="blk-title">Trade Deadline</h2><div class="blk-body"><div class="deadline"><div class="dl-big" data-deadline="2026-11-26T13:00:00-05:00">22d 15h 50m</div>
         <div class="dl-sub">Thu, Nov 26, 12:00 PM CST</div><small></small></div></div></section><section id="s-txj9t4ye" class="blk mblk blk-standings" style="--scale:1"><h2 class="blk-title">Standings</h2><div class="blk-body"><table class="tbl">
         <thead><tr><th class="c-rank">#</th><th>Team</th><th class="num">Record</th><th class="num">Overall</th><th class="num">PF</th><th class="num">Playoffs</th></tr></thead>
         <tbody><tr class=""><td class="c-rank">1</td><td class="c-team">Yajat</td><td class="num">6-1</td><td class="num">38-10</td><td class="num">1,925.70</td><td class="num"><span class="odds"><i style="width:98.86%"></i><b>98.86%</b></span></td></tr><tr class=""><td class="c-rank">2</td><td class="c-team">Derek</td><td class="num">5-2</td><td class="num">39-9</td><td class="num">2,025.64</td><td class="num"><span class="odds"><i style="width:90.86%"></i><b>90.86%</b></span></td></tr><tr class=""><td class="c-rank">3</td><td class="c-team">Travis</td><td class="num">4-2</td><td class="num">32-16</td><td class="num">1,918.22</td><td class="num"><span class="odds"><i style="width:82.25%"></i><b>82.25%</b></span></td></tr><tr class=""><td class="c-rank">4</td><td class="c-team">Josh</td><td class="num">4-3</td><td class="num">21-27</td><td class="num">1,656.08</td><td class="num"><span class="odds"><i style="width:70.17%"></i><b>70.17%</b></span></td></tr><tr class="cut"><td colspan="6"><span>Outside the cut</span></td></tr><tr class=""><td class="c-rank">5</td><td class="c-team">Henry</td><td class="num">3-3</td><td class="num">25-23</td><td class="num">1,748.36</td><td class="num"><span class="odds"><i style="width:53.62%"></i><b>53.62%</b></span></td></tr><tr class=""><td class="c-rank">6</td><td class="c-team">Caden</td><td class="num">2-6</td><td class="num">7-41</td><td class="num">1,351.50</td><td class="num"><span class="odds"><i style="width:4%"></i><b>4%</b></span></td></tr><tr class=""><td class="c-rank">7</td><td class="c-team">Antonio</td><td class="num">0-7</td><td class="num">6-42</td><td class="num">1,348.20</td><td class="num"><span class="odds"><i style="width:0.24%"></i><b>0.24%</b></span></td></tr></tbody>
@@ -460,7 +501,7 @@ small { font-size: 0.66em; color: var(--muted); }
         <table class="mw-lines"><tbody><tr><td class="num">1,656.08</td><th>Points for</th><td class="num">1,748.36</td></tr><tr><td class="num">70.17%</td><th>Playoff odds</th><td class="num">53.62%</td></tr><tr><td class="num">85.82%</td><th>With a win</th><td class="num">70.91%</td></tr><tr><td class="num">54.49%</td><th>With a loss</th><td class="num">36.53%</td></tr></tbody></table>
         <div class="mw-notes"><div>Last meeting: Henry won 245.14–222.22 (2025 Wk 8)</div></div>
         
-      </div></div></section><section id="s-tdsk66uq" class="blk mblk blk-spacer no-card" style="--scale:1"><div class="blk-body"><div class="mdiv space" style="padding:100px 0;"><i></i></div></div></section><section id="s-ketmj47k" class="blk mblk blk-richtext no-card" style="--scale:1"><div class="blk-body"><div class="rich style-plain align-center"><p><span style="font-size:32px;line-height:1.2"><b>Record Book</b></span></p></div></div></section><section id="s-nqr7wq2q" class="blk mblk blk-richtext no-card" style="--scale:1"><div class="blk-body"><div class="rich style-plain align-center"><p><span style="font-size:64px;line-height:1.2;color:var(--good)">90.57</span><br>Biggest projected upset for Josh<br>Next best: Antonio 47.29</p></div></div></section><section id="s-38erlxsh" class="blk mblk blk-richtext no-card" style="--scale:1"><div class="blk-body"><div class="rich style-plain align-center"><p><span style="font-size:64px;line-height:1.2;color:var(--good)">3 out of 3</span><br>Upsets this week<br>Next best: 2 of 3 (once)</p></div></div></section><section id="s-8fyylvfj" class="blk mblk blk-richtext no-card" style="--scale:1"><div class="blk-body"><div class="rich style-plain align-center"><p><span style="font-size:64px;line-height:1.2;color:var(--bad)">8</span><br>Losses in a row for Antonio<br>Next Best: Caden with 7 (Non-active)</p></div></div></section><section id="s-asjyp68y" class="blk mblk blk-richtext no-card" style="--scale:1"><div class="blk-body"><div class="rich style-plain align-center"><p><span style="font-size:64px;line-height:1.2;color:var(--good)">3</span><br>Consecutive Highest Scoring<br>Weeks for Travis<br>Next Best: Many with 2</p></div></div></section><section id="s-8uwf3tp6" class="blk mblk blk-richtext no-card" style="--scale:1"><div class="blk-body"><div class="rich style-plain align-center"><p><span style="font-size:64px;line-height:1.2;color:var(--bad)">9</span><br>Consecutive Weeks Below 200<br>for Caden<br>Next Best: Antonio with 8 (Non-active)</p></div></div></section><section id="s-lcfx61vc" class="blk mblk blk-spacer no-card" style="--scale:1"><div class="blk-body"><div class="mdiv space" style="padding:100px 0;"><i></i></div></div></section><section id="s-ext62jia" class="blk mblk blk-results" style="--scale:1"><h2 class="blk-title">Week 8 Results</h2><div class="blk-body"><div class="matchups"><div class="mu"><div class="mu-team l win"><b>Travis</b><small>4-2</small></div><div class="mu-score win">270.76</div><div class="mu-dash">–</div><div class="mu-score">238.20</div><div class="mu-team r"><b>Derek</b><small>5-2</small></div></div><div class="mu"><div class="mu-team l win"><b>Josh</b><small>4-3</small></div><div class="mu-score win">234.30</div><div class="mu-dash">–</div><div class="mu-score">226.46</div><div class="mu-team r"><b>Yajat</b><small>6-1</small></div></div><div class="mu"><div class="mu-team l win"><b>Caden</b><small>2-6</small></div><div class="mu-score win">197.58</div><div class="mu-dash">–</div><div class="mu-score">149.50</div><div class="mu-team r"><b>Antonio</b><small>0-7</small></div></div><div class="mu bye"><div class="mu-team l"><b>Henry</b><small>3-3</small></div><div class="mu-score">189.20</div><div class="mu-dash">·</div><div class="mu-score muted">BYE</div><div class="mu-team r"><small>No result, PF only</small></div></div></div></div></section><section id="s-4609g7ei" class="blk mblk blk-upcoming" style="--scale:1"><h2 class="blk-title">Week 9 Matchups</h2><div class="blk-body"><ol class="upcoming"><li class="up"><b>Travis</b><span class="h2h">(2-1)</span><span class="r"><b>Antonio</b></span></li><li class="up"><b>Henry</b><span class="h2h">(2-0)</span><span class="r"><b>Josh</b></span></li><li class="up"><b>Yajat</b><span class="h2h">(2-1)</span><span class="r"><b>Derek</b></span></li><li class="up bye"><b>Caden</b><span class="h2h muted">BYE</span><span></span></li></ol><small class="note">Records are all-time regular-season head-to-head.</small></div></section><section id="s-1fo2amxn" class="blk mblk blk-picks" style="--scale:1"><h2 class="blk-title">2027 Draft Board — If the Season Ended Today</h2><div class="blk-body"><div class="pick-board one" style="--cols:1"><div class="pk" style="--pk:#6faad8">
+      </div></div></section><section id="s-tdsk66uq" class="blk mblk blk-spacer no-card" style="--scale:1"><div class="blk-body"><div class="mdiv space" style="padding:100px 0;"><i></i></div></div></section><section id="s-ketmj47k" class="blk mblk blk-richtext no-card" style="--scale:1"><div class="blk-body"><div class="rich style-plain align-center"><p><span style="font-size:32px;line-height:1.2"><b>Record Book</b></span></p></div></div></section><section id="s-nqr7wq2q" class="blk mblk blk-richtext no-card" style="--scale:1"><div class="blk-body"><div class="rich style-plain align-center"><p><span class="tc" style="font-size:64px;line-height:1.2;color:var(--good);--tc:var(--good)">90.57</span><br>Biggest projected upset for Josh<br>Next best: Antonio 47.29</p></div></div></section><section id="s-38erlxsh" class="blk mblk blk-richtext no-card" style="--scale:1"><div class="blk-body"><div class="rich style-plain align-center"><p><span class="tc" style="font-size:64px;line-height:1.2;color:var(--good);--tc:var(--good)">3 out of 3</span><br>Upsets this week<br>Next best: 2 of 3 (once)</p></div></div></section><section id="s-8fyylvfj" class="blk mblk blk-richtext no-card" style="--scale:1"><div class="blk-body"><div class="rich style-plain align-center"><p><span class="tc" style="font-size:64px;line-height:1.2;color:var(--bad);--tc:var(--bad)">8</span><br>Losses in a row for Antonio<br>Next Best: Caden with 7 (Non-active)</p></div></div></section><section id="s-asjyp68y" class="blk mblk blk-richtext no-card" style="--scale:1"><div class="blk-body"><div class="rich style-plain align-center"><p><span class="tc" style="font-size:64px;line-height:1.2;color:var(--good);--tc:var(--good)">3</span><br>Consecutive Highest Scoring<br>Weeks for Travis<br>Next Best: Many with 2</p></div></div></section><section id="s-8uwf3tp6" class="blk mblk blk-richtext no-card" style="--scale:1"><div class="blk-body"><div class="rich style-plain align-center"><p><span class="tc" style="font-size:64px;line-height:1.2;color:var(--bad);--tc:var(--bad)">9</span><br>Consecutive Weeks Below 200<br>for Caden<br>Next Best: Antonio with 8 (Non-active)</p></div></div></section><section id="s-lcfx61vc" class="blk mblk blk-spacer no-card" style="--scale:1"><div class="blk-body"><div class="mdiv space" style="padding:100px 0;"><i></i></div></div></section><section id="s-ext62jia" class="blk mblk blk-results" style="--scale:1"><h2 class="blk-title">Week 8 Results</h2><div class="blk-body"><div class="matchups"><div class="mu"><div class="mu-team l win"><b>Travis</b><small>4-2</small></div><div class="mu-score win">270.76</div><div class="mu-dash">–</div><div class="mu-score">238.20</div><div class="mu-team r"><b>Derek</b><small>5-2</small></div></div><div class="mu"><div class="mu-team l win"><b>Josh</b><small>4-3</small></div><div class="mu-score win">234.30</div><div class="mu-dash">–</div><div class="mu-score">226.46</div><div class="mu-team r"><b>Yajat</b><small>6-1</small></div></div><div class="mu"><div class="mu-team l win"><b>Caden</b><small>2-6</small></div><div class="mu-score win">197.58</div><div class="mu-dash">–</div><div class="mu-score">149.50</div><div class="mu-team r"><b>Antonio</b><small>0-7</small></div></div><div class="mu bye"><div class="mu-team l"><b>Henry</b><small>3-3</small></div><div class="mu-score">189.20</div><div class="mu-dash">·</div><div class="mu-score muted">BYE</div><div class="mu-team r"><small>No result, PF only</small></div></div></div></div></section><section id="s-4609g7ei" class="blk mblk blk-upcoming" style="--scale:1"><h2 class="blk-title">Week 9 Matchups</h2><div class="blk-body"><ol class="upcoming"><li class="up"><b>Travis</b><span class="h2h">(2-1)</span><span class="r"><b>Antonio</b></span></li><li class="up"><b>Henry</b><span class="h2h">(2-0)</span><span class="r"><b>Josh</b></span></li><li class="up"><b>Yajat</b><span class="h2h">(2-1)</span><span class="r"><b>Derek</b></span></li><li class="up bye"><b>Caden</b><span class="h2h muted">BYE</span><span></span></li></ol><small class="note">Records are all-time regular-season head-to-head.</small></div></section><section id="s-1fo2amxn" class="blk mblk blk-picks" style="--scale:1"><h2 class="blk-title">2027 Draft Board — If the Season Ended Today</h2><div class="blk-body"><div class="pick-board one" style="--cols:1"><div class="pk" style="--pk:#6faad8">
               <div class="pk-top"><b>Caden</b><span class="pk-no">1.01</span></div>
               <div class="pk-sub">2-6 · #6</div>
               <div class="pk-foot"><span class="pk-arrow">→</span></div>
@@ -488,7 +529,120 @@ small { font-size: 0.66em; color: var(--muted); }
               <div class="pk-top"><b>Travis</b><span class="pk-no">1.07</span></div>
               <div class="pk-sub">6-1 · #1</div>
               <div class="pk-foot"><span class="pk-arrow">→</span><span class="pk-pill">From Yajat</span></div>
-            </div></div></div></section><section id="s-zodhuf2c" class="blk mblk blk-buttons no-card" style="--scale:1"><div class="blk-body"><div class="mbtns filled stack"><a class="mbtn" href="https://sleeper.com/leagues/1311995439410581504" target="_blank" rel="noopener">Open Sleeper</a></div></div></section></main><footer class="mfoot">Data via Sleeper · Updated Nov 3, 7:46 PM</footer></div>
+            </div></div></div></section><section id="s-zodhuf2c" class="blk mblk blk-buttons no-card" style="--scale:1"><div class="blk-body"><div class="mbtns filled stack"><a class="mbtn" href="https://sleeper.com/leagues/1311995439410581504" target="_blank" rel="noopener">Open Sleeper</a></div></div></section><section id="s-ixavfr03" class="blk mblk blk-spacer no-card" style="--scale:1"><div class="blk-body"><div class="mdiv space" style="padding:32px 0;"><i></i></div></div></section></main></div>
 <script>(function(){function t(){document.querySelectorAll('[data-deadline]').forEach(function(e){var ms=new Date(e.dataset.deadline)-Date.now();if(!(ms>0)){e.textContent=e.dataset.passed||'';return}var d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.floor(ms%36e5/6e4);e.textContent=d?d+'d '+h+'h '+m+'m':h+'h '+m+'m'})}t();setInterval(t,30000)})();</script>
+<script>(function smoothScroll(box, amount) {
+  var el = box || document.scrollingElement || document.documentElement;
+  var host = box || window;
+  var a = 0;
+  var cur = 0;
+  var target = 0;
+  var running = false;
+  var last = 0;
+  var raf = 0;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var touch = { mode: null, x: 0, y: 0, lastY: 0, lastT: 0, v: 0 };
+  // Fraction of the remaining distance covered per 60 Hz frame.
+  function ease() {
+    return 0.12 - 0.1 * a;
+  }
+  // Decay rate per millisecond, so a flick hands off to the glide at the same speed.
+  function rate() {
+    return -Math.log(1 - ease()) / 16.67;
+  }
+  function clamp(v) {
+    return Math.max(0, Math.min(el.scrollHeight - el.clientHeight, v));
+  }
+  function tick(now) {
+    var k = 1 - Math.pow(1 - ease(), Math.min(64, now - last) / 16.67);
+    last = now;
+    cur += (target - cur) * k;
+    if (Math.abs(target - cur) < 0.5) {
+      cur = target;
+      running = false;
+    }
+    el.scrollTop = cur;
+    if (running) raf = requestAnimationFrame(tick);
+  }
+  function go() {
+    if (running) return;
+    running = true;
+    last = performance.now();
+    raf = requestAnimationFrame(tick);
+  }
+  function stop() {
+    running = false;
+    cancelAnimationFrame(raf);
+    cur = target = el.scrollTop;
+  }
+  function on() {
+    return a > 0 && !reduce;
+  }
+  host.addEventListener('scroll', function () {
+    if (!running) cur = target = el.scrollTop;
+  }, { passive: true });
+  host.addEventListener('wheel', function (e) {
+    if (!on() || e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    e.preventDefault();
+    if (!running) cur = target = el.scrollTop;
+    target = clamp(target + e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? el.clientHeight : 1));
+    go();
+  }, { passive: false });
+  host.addEventListener('touchstart', function (e) {
+    touch.mode = on() && e.touches.length === 1 ? null : 'native';
+    if (touch.mode) return;
+    stop();
+    touch.x = e.touches[0].clientX;
+    touch.y = touch.lastY = e.touches[0].clientY;
+    touch.lastT = performance.now();
+    touch.v = 0;
+  }, { passive: true });
+  host.addEventListener('touchmove', function (e) {
+    if (touch.mode === 'native') return;
+    var t = e.touches[0];
+    if (!touch.mode) {
+      var dx = Math.abs(t.clientX - touch.x);
+      var dy = Math.abs(t.clientY - touch.y);
+      if (dx < 4 && dy < 4) return;
+      // Sideways swipes (jump menu, wide tables) keep their normal scrolling.
+      touch.mode = dx > dy ? 'native' : 'drag';
+      if (touch.mode === 'native') return;
+    }
+    e.preventDefault();
+    var now = performance.now();
+    var d = touch.lastY - t.clientY;
+    cur = target = clamp(cur + d);
+    el.scrollTop = cur;
+    touch.v = 0.2 * touch.v + 0.8 * (d / Math.max(1, now - touch.lastT));
+    touch.lastY = t.clientY;
+    touch.lastT = now;
+  }, { passive: false });
+  host.addEventListener('touchend', function () {
+    if (touch.mode !== 'drag') return;
+    touch.mode = null;
+    if (performance.now() - touch.lastT > 80) touch.v = 0;
+    target = clamp(cur + touch.v / rate());
+    go();
+  });
+  // Jump-menu links glide too.
+  (box || document).addEventListener('click', function (e) {
+    var link = on() && e.target.closest && e.target.closest('a[href^="#"]');
+    var dest = link && link.getAttribute('href').length > 1 && document.getElementById(link.getAttribute('href').slice(1));
+    if (!dest) return;
+    e.preventDefault();
+    if (!running) cur = el.scrollTop;
+    var top = dest.getBoundingClientRect().top - (box ? box.getBoundingClientRect().top : 0);
+    target = clamp(el.scrollTop + top - (parseFloat(getComputedStyle(dest).scrollMarginTop) || 0));
+    go();
+  });
+  var api = {
+    set: function (n) {
+      a = Math.max(0, Math.min(1, Number(n) || 0));
+    },
+  };
+  api.set(amount);
+  return api;
+})(null, 0.35);</script>
+<script>(function(){if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px'});document.querySelectorAll('.mpage.reveal .mblk').forEach(function(el){if(el.getBoundingClientRect().top>innerHeight){el.classList.add('rv');io.observe(el)}})})();</script>
 </body>
 </html>
