@@ -24,7 +24,7 @@ const DEFAULTS: SiteConfig = {
   siteTitle: 'League',
   theme: 'Midnight',
   apple: true,
-  smoothScroll: true,
+  smoothScroll: false,
   glide: 0.45,
   reveal: true,
   model: 'coin',

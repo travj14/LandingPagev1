@@ -2,7 +2,7 @@
   "siteTitle": "Booty Lickers Unite",
   "theme": "Midnight",
   "apple": true,
-  "smoothScroll": true,
+  "smoothScroll": false,
   "glide": 0.45,
   "reveal": true,
   "model": "coin",

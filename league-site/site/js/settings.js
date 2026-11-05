@@ -17,7 +17,7 @@ const TEAM_LIGHT = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008
 const KEY = 'blu-site-settings';
 const LOOK = ['theme', 'apple', 'smoothScroll', 'glide', 'reveal', 'model'];
 
-let defaults = { theme: 'Midnight', apple: true, smoothScroll: true, glide: 0.45, reveal: true, model: 'coin' };
+let defaults = { theme: 'Midnight', apple: true, smoothScroll: false, glide: 0.45, reveal: true, model: 'coin' };
 let mine = {};
 try {
   mine = JSON.parse(localStorage.getItem(KEY) || '{}') || {};
