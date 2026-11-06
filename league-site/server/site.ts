@@ -9,6 +9,7 @@ import { historyPage, recordBook, weekMilestones } from './archive.ts';
 import { h2hGrid, rivalry, weekList, weekPage } from './matchups.ts';
 import { teamPage, teamsIndex } from './teams.ts';
 import { onRefreshed, registerRefreshRoutes, scheduleNightlyRefresh } from './refresh.ts';
+import { registerProjectionRoutes, startProjections } from './projections.ts';
 
 // Public, read-only league site. Nothing here writes files except the Sleeper cache.
 const app = express();
@@ -26,11 +27,14 @@ app.get('/healthz', (_req, res) => {
 // (behind nginx, X-Forwarded-Proto/Host from the local proxy are trusted).
 const SITE_DIR = path.resolve(import.meta.dirname, '../site');
 app.set('trust proxy', 'loopback');
-app.get(['/', '/index.html'], async (req, res) => {
+const page = (file: string) => async (req: Request, res: Response) => {
   const origin = (process.env.SITE_URL || `${req.protocol}://${req.get('host')}`).replace(/\/$/, '');
-  const html = (await fs.readFile(path.join(SITE_DIR, 'index.html'), 'utf8')).replaceAll('%ORIGIN%', origin);
+  const html = (await fs.readFile(path.join(SITE_DIR, file), 'utf8')).replaceAll('%ORIGIN%', origin);
   res.set('Cache-Control', 'no-cache').type('html').send(html);
-});
+};
+app.get(['/', '/index.html'], page('index.html'));
+// payrollgm.com/projections: live matchup projections for BLU and El Diablo (server/projections.ts).
+app.get(['/projections', '/projections/'], page('projections.html'));
 
 // Static files revalidate every load (cheap 304s) so a deploy shows up right away; images can sit for a day.
 app.use(
@@ -81,6 +85,7 @@ app.get('/api/site/rivalry/:a/:b', async (req, res) => {
 });
 app.get('/api/site/records', api((c) => recordBook(c)));
 app.get('/api/site/history', api((c) => historyPage(c)));
+registerProjectionRoutes(app);
 app.use('/api', (_req, res) => {
   res.status(404).json({ error: 'Not found' });
 });
@@ -115,4 +120,5 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
 app.listen(PORT, () => {
   console.log(`League site running at http://localhost:${PORT}`);
   warm().catch((err) => console.error('Initial warm-up failed:', err));
+  startProjections();
 });

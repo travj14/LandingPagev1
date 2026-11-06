@@ -29,6 +29,16 @@ For development, `npm run dev` runs in the foreground and restarts on server fil
 
 Drop exported weekly recap images into `site/recaps/`, named like `2026-week-08.png`. They show up under History → More, newest first.
 
+## Projections page
+
+`/projections` (payrollgm.com/projections) shows this week's matchups for BLU and El Diablo with projected scores, win chances and per-player projections, plus standings with playoff and last-place odds. The code is `server/projections.ts` and `site/js/projections.js`.
+
+- It runs the `~/blu/projection-system` method in Node: each starter's outcomes come from the 200 historical player-games with the nearest Sleeper projection (2022–2024), scaled so the average equals their Sleeper projection under the league's scoring. 100,000 simulations per matchup.
+- Those historical outcomes live in `data/pools/blu.json` and `data/pools/diablo.json`. If a league changes its scoring, the log warns; re-export with `python3 scripts/export_pools.py --league blu=<id> --league diablo=<id>` from `projection-system`.
+- Projections are frozen when each NFL game kicks off (`data/cache/kickoff-projections/`). During a game, the unplayed share is scaled by the clock from ESPN's scoreboard.
+- A starter ruled Out, Doubtful, IR, suspended or on PUP (Sleeper's latest status, so it also catches in-game rulings) keeps his points so far and is projected 0 from there.
+- Refreshes are shared by every viewer. Automatic ones run only on game days: at 12:30am Central the server looks up that day's games, then refreshes every 10 minutes on the clock from the first kickoff until all of that day's games are final (one last refresh after). Anyone can press Refresh any time once the 1-minute cooldown after the last refresh ends. The server also refreshes once at start.
+
 ## Production notes
 
 - `GET /healthz` returns 200 once league data has loaded (503 before). Point nginx or uptime checks at it.

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b1020" />
+    <title>Projections · payrollgm</title>
+    <meta name="description" content="Live matchup projections, win probabilities and playoff odds for BLU and El Diablo." />
+    <link rel="stylesheet" href="/site.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Projections" />
+    <meta property="og:description" content="Live matchup projections, win probabilities and playoff odds for BLU and El Diablo." />
+    <meta property="og:url" content="%ORIGIN%/projections" />
+    <meta property="og:image" content="%ORIGIN%/icons/og.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <div class="pj-app">
+      <header class="topbar">
+        <a class="brand" href="/projections">Projections</a>
+        <span class="week-chip" id="weekChip"></span>
+        <a class="pj-home" href="/">League site ›</a>
+      </header>
+
+      <div class="pj-controls">
+        <div class="seg" id="leagueTabs" role="tablist" aria-label="League"></div>
+        <div class="seg" id="viewTabs" role="tablist" aria-label="View">
+          <button data-view="matchup" role="tab">Matchup</button>
+          <button data-view="standings" role="tab">Standings</button>
+        </div>
+      </div>
+
+      <div class="pj-refresh">
+        <span class="muted" id="refreshInfo" aria-live="polite">Connecting…</span>
+        <button class="btn" id="refreshBtn" disabled>Refresh</button>
+      </div>
+
+      <main id="view" class="pj-view" tabindex="-1"></main>
+      <footer class="site-foot" id="foot">
+        Win chances come from 100,000 simulations of each starting lineup, built on Sleeper's projections and how players with similar projections actually scored in 2022–2024.
+        Later weeks in the playoff and last-place odds are coin flips. A player ruled Out, Doubtful, IR, suspended or on PUP keeps what he's scored and is projected 0 from there. Everyone on this page shares one refresh: automatic every 10 minutes on game days from the first kickoff until the day's games are final, and anyone can refresh after a 1-minute cooldown.
+      </footer>
+    </div>
+    <script type="module" src="/js/projections.js"></script>
+  </body>
+</html>

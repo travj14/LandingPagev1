@@ -530,3 +530,47 @@ code { font-size: 12px; background: var(--soft); padding: 1px 5px; border-radius
 .wi-lose button.on { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 16%, transparent); }
 .wi-lose button.on::after { content: 'L'; font-size: 10px; font-weight: 850; color: var(--bad); }
 .wi-lose .note { margin: 6px 0 0; }
+
+/* ---------- Projections page (/projections) ---------- */
+.pj-app { max-width: 760px; margin: 0 auto; padding: 0 16px 40px; }
+.pj-home { margin-left: auto; font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; white-space: nowrap; }
+.pj-home:hover { color: var(--text); }
+.pj-controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; margin: 4px 0 10px; }
+.pj-refresh { display: flex; align-items: center; gap: 10px; justify-content: space-between; font-size: 13px; margin-bottom: 12px; }
+.pj-refresh .btn { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.pj-view { display: grid; gap: var(--gap, 12px); }
+.pj-game { display: grid; gap: 10px; }
+.pj-team { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 10px; }
+.pj-av { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; background: var(--soft); display: inline-grid; place-items: center; font-weight: 800; color: var(--muted); flex: none; }
+.pj-who { min-width: 0; }
+.pj-name { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pj-owner { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pj-proj { text-align: right; }
+.pj-mean { font-size: 20px; font-weight: 850; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.pj-range { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pj-win { min-width: 4.2em; text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--muted); }
+.pj-win.fav { color: var(--good); }
+.pj-bar { height: 6px; border-radius: 99px; background: color-mix(in srgb, var(--accent2) 55%, transparent); overflow: hidden; }
+.pj-bar span { display: block; height: 100%; background: var(--accent); border-right: 2px solid var(--card); }
+.pj-game .note { margin: 0; }
+.pj-game details summary { cursor: pointer; font-size: 13px; font-weight: 650; color: var(--accent); }
+.pj-tables { display: grid; gap: 14px; margin-top: 10px; }
+.pj-game details > .pj-tt { margin-top: 10px; }
+.pj-tth { display: flex; align-items: center; gap: 8px; font-size: 14px; margin-bottom: 2px; }
+.pj-tth .pj-av { width: 22px; height: 22px; font-size: 11px; }
+.pj-players { font-size: 13px; }
+.pj-players th:first-child, .pj-players td:first-child { padding-left: 0; }
+.pj-players th:last-child, .pj-players td:last-child { padding-right: 0; }
+.pj-players td.l { white-space: normal; width: 100%; }
+.pj-pn { font-weight: 650; }
+.pj-ps { font-size: 11.5px; color: var(--muted); }
+.pj-live { color: var(--bad); font-weight: 700; }
+.pj-inj { display: inline-block; margin-left: 6px; font-size: 10px; font-weight: 800; padding: 1px 5px; border-radius: 6px; background: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--accent); vertical-align: 1px; }
+.pj-inj.bad { background: color-mix(in srgb, var(--bad) 22%, transparent); color: var(--bad); }
+.pj-sn { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.pj-sn .pj-av { width: 26px; height: 26px; font-size: 12px; }
+.pj-sn span { display: grid; min-width: 0; }
+.pj-sn b, .pj-sn small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pj-sn small { color: var(--muted); font-size: 11.5px; }
+@media (max-width: 480px) { .pj-pa { display: none; } }
+@media (min-width: 700px) { .pj-tables { grid-template-columns: 1fr 1fr; } }
