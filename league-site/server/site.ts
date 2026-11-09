@@ -86,12 +86,12 @@ app.get('/api/site/rivalry/:a/:b', async (req, res) => {
 app.get('/api/site/records', api((c) => recordBook(c)));
 app.get('/api/site/history', api((c) => historyPage(c)));
 registerProjectionRoutes(app);
+// In production the refresh endpoint needs REFRESH_TOKEN: behind nginx every request looks local.
+registerRefreshRoutes(app, { requireToken: process.env.NODE_ENV === 'production' });
 app.use('/api', (_req, res) => {
   res.status(404).json({ error: 'Not found' });
 });
 
-// In production the refresh endpoint needs REFRESH_TOKEN: behind nginx every request looks local.
-registerRefreshRoutes(app, { requireToken: process.env.NODE_ENV === 'production' });
 scheduleNightlyRefresh();
 
 /** Build the expensive pages ahead of time so the first visitor after a start or refresh doesn't wait. */
