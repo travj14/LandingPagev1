@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<title>Booty Lickers Unite · Week 9</title>
+
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:#0b1020}
+/* Section content styles, shared by the print editor, the mobile editor and exported mobile pages. */
+.blk-title {
+  margin: 0 0 0.6em;
+  font-size: 0.72em;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+}
+.blk-title::before { content: ""; width: 1.2em; height: 0.24em; background: var(--accent); border-radius: 2px; flex: none; }
+
+.blk h4 { margin: 0.8em 0 0.35em; font-size: 0.6em; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.blk h4:first-child { margin-top: 0; }
+.muted { color: var(--muted); }
+.empty { color: var(--muted); margin: 0; font-style: italic; }
+small { font-size: 0.66em; color: var(--muted); }
+.hl { background: color-mix(in srgb, var(--accent) 16%, transparent); }
+
+/* Header */
+.hdr { padding: 0.2em 0 0.1em; }
+.hdr.align-center { text-align: center; }
+.hdr-kicker { color: var(--accent2); font-size: 0.62em; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; }
+.hdr-heading { font-size: 3.3em; font-weight: 900; letter-spacing: -0.025em; line-height: 0.95; text-transform: uppercase; margin: 0.12em 0 0.12em; font-style: italic; }
+.hdr-sub { font-size: 1.05em; color: var(--muted); font-weight: 600; display: flex; gap: 0.7em; align-items: center; flex-wrap: wrap; }
+.hdr.align-center .hdr-sub { justify-content: center; }
+.live-badge { background: var(--bad); color: #fff; font-size: 0.5em; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.35em 0.8em; border-radius: 99px; }
+
+/* Tables */
+.tbl { width: 100%; border-collapse: collapse; }
+.tbl th { font-size: 0.5em; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); text-align: left; font-weight: 700; padding: 0 0.5em 0.6em; }
+.tbl td { padding: 0.42em 0.5em; border-top: 1px solid color-mix(in srgb, var(--text) 9%, transparent); font-size: 0.82em; }
+.tbl .num { text-align: right; white-space: nowrap; }
+.tbl .c-rank { width: 1.8em; color: var(--muted); font-weight: 800; text-align: center; }
+.tbl .c-team { font-weight: 800; font-size: 0.95em; }
+.tbl tr.cut td { border-top: none; padding: 0.5em 0 0.2em; }
+.tbl tr.cut span, .plain-list .cut-label {
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+  font-size: 0.6em;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bad);
+  font-weight: 800;
+}
+.tbl tr.cut span::after, .plain-list .cut-label::after { content: ""; flex: 1; border-top: 2px dashed color-mix(in srgb, var(--bad) 55%, transparent); }
+.tbl tr.cut + tr td { border-top: none; }
+.odds { position: relative; display: block; width: 100%; min-width: 5.2em; box-sizing: border-box; text-align: right; padding: 0.1em 0.4em; border-radius: 6px; overflow: hidden; }
+.odds i { position: absolute; inset: 0 auto 0 0; background: color-mix(in srgb, var(--good) 22%, transparent); }
+.odds.out i { background: color-mix(in srgb, var(--bad) 22%, transparent); }
+.odds b { position: relative; }
+
+.plain-list { list-style: none; margin: 0; padding: 0; }
+.plain-list li { padding: 0.18em 0.3em; border-radius: 8px; }
+.plain-list .rank { color: var(--muted); font-weight: 700; }
+.plain-list .cut-label { margin: 0.4em 0 0.2em; }
+
+/* Matchups */
+.matchups { display: grid; gap: 0.4em; }
+.mu { display: grid; grid-template-columns: 1fr auto auto auto 1fr; align-items: center; gap: 0.6em; padding: 0.4em 0; border-top: 1px solid color-mix(in srgb, var(--text) 9%, transparent); font-size: 0.85em; }
+.mu:first-child { border-top: none; }
+.mu-team b { display: block; }
+.mu-team.r { text-align: right; }
+.mu-team small { font-size: 0.7em; }
+.mu-score { font-weight: 800; font-size: 1.05em; min-width: 4.4em; text-align: center; color: var(--muted); }
+.mu-score.win { color: var(--text); }
+.mu-team.win b { color: var(--accent); }
+.mu-dash { color: var(--muted); }
+
+/* Storylines */
+.stories { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.55em; }
+.stories li { padding-left: 1.1em; position: relative; font-size: 0.82em; line-height: 1.38; }
+.stories li::before { content: ""; position: absolute; left: 0; top: 0.5em; width: 0.42em; height: 0.42em; border-radius: 2px; background: var(--accent); transform: rotate(45deg); }
+.stories li.k-record { font-weight: 700; }
+.stories li.k-record::before { background: var(--bad); }
+.stories li.k-note::before { background: var(--accent2); }
+.stories li.s-story::before { background: var(--accent); }
+.stories li.s-record { font-weight: 700; }
+.stories li.s-record::before, .stories li.s-bad::before { background: var(--bad); }
+.stories li.s-good::before { background: var(--good); }
+.stories li.s-gold::before { background: #e3b341; }
+.stories li.s-muted { color: var(--muted); }
+.stories li.s-muted::before { background: var(--muted); }
+
+/* Ranked lists */
+.rank-list { margin: 0; padding: 0; list-style: none; counter-reset: r; display: grid; gap: 0.3em; }
+.rank-list li { counter-increment: r; display: grid; grid-template-columns: 1.4em auto 1fr auto; gap: 0.5em; align-items: baseline; font-size: 0.8em; }
+.rank-list li::before { content: counter(r); color: var(--muted); font-weight: 800; }
+.rank-list .muted { font-size: 0.78em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rank-list em { font-style: normal; font-weight: 800; color: var(--accent); }
+.pos-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5em; margin-top: 0.9em; }
+.pos-card { background: color-mix(in srgb, var(--text) 6%, transparent); border-radius: calc(var(--radius) * 0.55); padding: 0.55em 0.6em; display: grid; gap: 0.1em; font-size: 0.7em; }
+.pos-card b { line-height: 1.15; }
+.pos-card em { font-style: normal; font-weight: 800; font-size: 1.25em; color: var(--accent); }
+.pos-tag { font-size: 0.7em; font-weight: 800; letter-spacing: 0.12em; color: var(--accent2); }
+
+/* Max PF bars */
+.bar-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.45em; }
+.bar-list li { display: grid; grid-template-columns: 1.4em 1fr; gap: 0.5em; align-items: center; border-radius: 8px; padding: 0.1em 0.25em; }
+.bar-list .rank { color: var(--muted); font-weight: 800; font-size: 0.85em; }
+.bar-line { display: flex; justify-content: space-between; font-size: 0.82em; }
+.bar-line em { font-style: normal; font-weight: 800; }
+.bar { position: relative; height: 0.36em; border-radius: 99px; background: color-mix(in srgb, var(--text) 8%, transparent); margin: 0.25em 0 0.15em; overflow: hidden; }
+.bar i { position: absolute; inset: 0 auto 0 0; border-radius: 99px; background: color-mix(in srgb, var(--accent) 40%, transparent); }
+.bar i.pf { background: var(--accent); }
+
+/* Picks */
+.picks { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.3em; }
+.picks li { display: grid; grid-template-columns: auto 1fr auto; gap: 0.7em; align-items: center; padding: 0.3em 0.4em; border-radius: 10px; font-size: 0.82em; }
+.picks li b { display: block; }
+.picks li small { font-size: 0.72em; }
+.pick-no { font-weight: 900; color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); padding: 0.18em 0.5em; border-radius: 8px; font-size: 0.95em; }
+.pick-meta { color: var(--muted); font-size: 0.75em; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.4em; margin-top: 0.8em; }
+.chip { font-size: 0.6em; padding: 0.35em 0.7em; border-radius: 99px; background: color-mix(in srgb, var(--text) 7%, transparent); color: var(--muted); }
+.chip b { color: var(--text); }
+
+/* Trades */
+.trades { display: grid; gap: 0.7em; }
+.trade { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8em; padding: 0.7em 0.8em; border-radius: calc(var(--radius) * 0.6); background: color-mix(in srgb, var(--text) 5%, transparent); }
+.trade-side h5 { margin: 0 0 0.35em; font-size: 0.6em; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent2); }
+@container (max-width: 360px) { .trade { grid-template-columns: 1fr; } }
+@container (max-width: 300px) { .pos-grid { grid-template-columns: 1fr 1fr; } }
+.trade-side ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.2em; font-size: 0.75em; }
+
+/* Deadline */
+.deadline { display: grid; gap: 0.15em; }
+.dl-big { font-size: 2.1em; font-weight: 900; letter-spacing: -0.02em; color: var(--accent); line-height: 1; }
+.deadline.passed .dl-big { font-size: 1.2em; color: var(--muted); }
+.dl-sub { font-weight: 700; font-size: 0.8em; }
+
+/* Upcoming */
+.upcoming { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.3em; }
+.up { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.6em; align-items: center; font-size: 0.85em; padding: 0.25em 0; }
+.up .h2h { font-weight: 800; color: var(--accent); text-align: center; min-width: 3.4em; }
+.up .r { text-align: right; }
+.up small { font-size: 0.68em; }
+.note { display: block; margin-top: 0.6em; font-size: 0.52em; }
+
+/* Records */
+.records { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5em 1em; }
+.records li { padding: 0.5em 0.6em; border-radius: calc(var(--radius) * 0.55); background: color-mix(in srgb, var(--text) 5%, transparent); }
+.records li.broken { background: color-mix(in srgb, var(--bad) 18%, transparent); }
+@container (max-width: 420px) { .records { grid-template-columns: 1fr; } }
+.rec-label { font-size: 0.55em; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 700; display: flex; gap: 0.6em; align-items: center; }
+.rec-label .new { background: var(--bad); color: #fff; padding: 0.15em 0.5em; border-radius: 99px; letter-spacing: 0.1em; }
+.rec-val { display: flex; gap: 0.5em; align-items: baseline; font-size: 0.85em; }
+.rec-val em { font-style: normal; font-weight: 900; color: var(--accent); }
+.records small { font-size: 0.55em; display: block; }
+
+/* Pool */
+.pool-amt { font-size: 2.3em; font-weight: 900; color: var(--good); letter-spacing: -0.02em; line-height: 1; }
+.pool-sub { color: var(--muted); font-size: 0.75em; margin-top: 0.3em; }
+.pool-amt.down { color: var(--bad, #e5534b); }
+.pool-px { color: var(--muted); font-size: 0.6em; margin-top: 0.2em; opacity: 0.8; }
+
+/* Text */
+.text-blk p { margin: 0 0 0.5em; font-size: 0.85em; }
+.text-blk p:last-child { margin-bottom: 0; }
+.text-blk.align-center { text-align: center; }
+.text-blk.style-callout { border-left: 0.22em solid var(--accent); padding-left: 0.8em; }
+.text-blk.style-alert { background: color-mix(in srgb, var(--bad) 16%, transparent); border: 2px solid color-mix(in srgb, var(--bad) 60%, transparent); border-radius: calc(var(--radius) * 0.6); padding: 0.7em 0.9em; font-weight: 700; }
+
+/* ============ Pick tracker: Sleeper-style board ============ */
+.pick-board { display: grid; grid-template-columns: repeat(var(--cols, 7), minmax(0, 1fr)); gap: 0.35em; }
+.pk {
+  background: var(--pk);
+  color: #0f1b2d;
+  border-radius: 0.5em;
+  padding: 0.4em 0.5em 0.35em;
+  display: flex;
+  flex-direction: column;
+  min-height: 3.7em;
+  min-width: 0;
+}
+.pk-top { display: flex; justify-content: space-between; align-items: baseline; gap: 0.3em; }
+.pk-top b { font-size: 0.95em; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pk-no { font-size: 0.68em; font-weight: 700; opacity: 0.6; }
+.pk-sub { font-size: 0.66em; font-weight: 600; opacity: 0.72; }
+.pk-foot { margin-top: auto; display: flex; justify-content: space-between; align-items: flex-end; gap: 0.3em; padding-top: 0.15em; }
+.pk-arrow { font-size: 0.75em; font-weight: 800; opacity: 0.75; }
+.pk-pill { background: rgba(15, 27, 45, 0.82); color: #fff; font-size: 0.6em; font-weight: 700; padding: 0.2em 0.5em; border-radius: 0.35em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pick-board.focus .pk { opacity: 0.35; }
+.pick-board.focus .pk.on { opacity: 1; box-shadow: 0 0 0 0.15em var(--text); }
+
+/* Active streaks + record extras */
+.streaks { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.45em; }
+.stk-line { display: grid; grid-template-columns: auto 1fr auto; gap: 0.5em; align-items: baseline; font-size: 0.8em; }
+.stk-line span { color: var(--muted); font-size: 0.85em; text-transform: capitalize; }
+.stk-line em { font-style: normal; font-weight: 900; color: var(--accent); }
+.streaks li.is-record .stk-line em { color: var(--bad); }
+.streaks small { font-size: 0.58em; }
+.rec-label .live { background: var(--accent2); color: #0b1020; padding: 0.15em 0.5em; border-radius: 99px; letter-spacing: 0.1em; }
+.runners { margin: 0.3em 0 0; padding-left: 1.4em; font-size: 0.62em; color: var(--muted); }
+.runners b { color: var(--text); }
+
+/* Matchup of the week */
+.motw { display: grid; gap: 0.5em; }
+.mw-head { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 0.6em; }
+.mw-team { border-left: 0.3em solid var(--team); padding: 0.15em 0 0.15em 0.55em; min-width: 0; }
+.mw-team.r { border-left: none; border-right: 0.3em solid var(--team); padding: 0.15em 0.55em 0.15em 0; text-align: right; }
+.mw-name { font-weight: 800; font-size: 1.35em; line-height: 1.1; }
+.mw-team.win .mw-name { color: var(--accent); }
+.mw-meta { font-size: 0.75em; color: var(--muted); }
+.mw-vs { font-weight: 900; font-size: 1.1em; color: var(--accent); letter-spacing: 0.08em; }
+.mw-score { display: flex; align-items: baseline; gap: 0.35em; font-size: 1.15em; position: relative; }
+.mw-score b { color: var(--muted); }
+.mw-score b.win { color: var(--text); }
+.mw-score span { color: var(--muted); }
+.mw-score small { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); font-size: 0.55em; color: #e5534b; text-transform: uppercase; font-weight: 700; }
+.mw-lines { width: 100%; border-collapse: collapse; font-size: 0.82em; }
+.mw-lines td, .mw-lines th { padding: 0.18em 0.3em; border-top: 1px solid color-mix(in srgb, var(--text) 9%, transparent); }
+.mw-lines tr:first-child td, .mw-lines tr:first-child th { border-top: none; }
+.mw-lines th { font-weight: 600; color: var(--muted); text-align: center; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.04em; }
+.mw-lines td.num:first-child { text-align: left; font-weight: 700; }
+.mw-lines td.num:last-child { text-align: right; font-weight: 700; }
+.mw-notes { font-size: 0.75em; color: var(--muted); display: grid; gap: 0.1em; text-align: center; }
+.mw-notes b { color: var(--text); }
+.mw-blurb { margin: 0; font-size: 0.8em; text-align: center; font-style: italic; }
+.bar-line em .pf-of { font-weight: 600; color: var(--muted); }
+/* One card per row: a single line of pick no · name · record, with the pill and arrow on the right */
+.pick-board.one .pk { flex-direction: row; align-items: center; gap: 0.6em; min-height: 0; padding: 0.5em 0.75em; }
+.pick-board.one .pk-top, .pick-board.one .pk-foot { display: contents; }
+.pick-board.one .pk-no { order: 1; }
+.pick-board.one .pk-top b { order: 2; flex: none; flex-basis: auto; }
+.pick-board.one .pk-sub { order: 3; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pick-board.one .pk-pill { order: 4; }
+.pick-board.one .pk-arrow { display: none; }
+
+/* The mobile page: a single column of cards (half-width cards sit side by side).
+   Used by the mobile editor preview and copied into every exported page. */
+.mpage {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: var(--base);
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+  padding: var(--pad) var(--pad) calc(var(--pad) * 2);
+  padding-left: max(var(--pad), env(safe-area-inset-left));
+  padding-right: max(var(--pad), env(safe-area-inset-right));
+  -webkit-text-size-adjust: 100%;
+}
+.mpage.bg-glow { background: radial-gradient(120% 60% at 0% 0%, var(--bg2), transparent 70%) no-repeat, var(--bg); }
+.mpage.bg-fade { background: linear-gradient(180deg, var(--bg2), var(--bg) 60%) no-repeat, var(--bg); }
+.mpage.bg-solid { background: var(--bg); }
+.mpage a { color: var(--accent); }
+.mpage-inner { max-width: var(--maxw); margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--gap); }
+
+.mpage .mblk {
+  grid-column: span 2;
+  min-width: 0;
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 0.95em 1em;
+  container-type: inline-size;
+}
+.mpage .mblk.half { grid-column: span 1; }
+.mpage .mblk.no-card { background: transparent; padding: 0.15em 0.1em; }
+.mpage .mblk .blk-body { font-size: calc(1em * var(--scale, 1)); overflow-x: auto; }
+.mpage .blk-title, .mpage .hero-h, .mpage .hdr-heading { font-family: var(--hfont); }
+.mpage .blk-title { font-size: 0.74em; }
+
+/* Collapsible sections */
+.mpage details.mblk > summary { list-style: none; cursor: pointer; margin-bottom: 0; }
+.mpage details.mblk > summary::-webkit-details-marker { display: none; }
+.mpage details.mblk > summary::after { content: "▾"; margin-left: auto; color: var(--muted); font-size: 1.3em; transition: transform 0.15s; }
+.mpage details.mblk:not([open]) > summary::after { transform: rotate(-90deg); }
+.mpage details.mblk[open] > summary { margin-bottom: 0.6em; }
+
+/* Jump menu */
+.mnav {
+  position: sticky; top: 0; z-index: 5;
+  display: flex; gap: 0.4em; overflow-x: auto; scrollbar-width: none;
+  margin: calc(var(--pad) * -1) calc(var(--pad) * -1) var(--gap); padding: 0.6em var(--pad);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+.mnav::-webkit-scrollbar { display: none; }
+.mnav a {
+  flex: none; text-decoration: none; color: var(--text); font-size: 0.78em; font-weight: 700;
+  padding: 0.4em 0.85em; border-radius: 99px; background: color-mix(in srgb, var(--text) 9%, transparent);
+}
+.mpage .mblk { scroll-margin-top: 3.4em; }
+.mfoot { text-align: center; color: var(--muted); font-size: 0.7em; margin-top: 1.6em; letter-spacing: 0.03em; }
+
+/* Hero */
+.hero { padding: 0.4em 0 0.2em; }
+.hero.align-center { text-align: center; }
+.hero.has-img { background-size: cover; background-position: center; border-radius: var(--radius); padding: 2.4em 1.1em 1.4em; color: #fff; }
+.hero.has-img .hdr-sub { color: rgba(255, 255, 255, 0.85); }
+.hero-h { font-size: calc(2.6em * var(--hs, 1)); font-weight: 900; letter-spacing: -0.02em; line-height: 0.95; text-transform: uppercase; font-style: italic; margin: 0.1em 0 0.15em; overflow-wrap: anywhere; }
+.hero.align-center .hdr-sub { justify-content: center; }
+.mpage .hdr-sub { font-size: 1em; }
+
+/* Text */
+.rich { font-size: 0.92em; line-height: 1.5; }
+.rich p { margin: 0 0 0.7em; }
+.rich > :last-child { margin-bottom: 0; }
+.rich ul, .rich ol { margin: 0 0 0.7em; padding-left: 1.3em; }
+.rich li { margin: 0.2em 0; }
+.rich .md-h { margin: 0.9em 0 0.35em; line-height: 1.15; }
+.rich .md-h:first-child { margin-top: 0; }
+.rich h3.md-h { font-size: 1.35em; font-weight: 900; }
+.rich h4.md-h { font-size: 1.1em; font-weight: 800; }
+.rich h5.md-h { font-size: 0.75em; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.rich blockquote, .mquote blockquote { margin: 0 0 0.7em; padding-left: 0.8em; border-left: 0.2em solid var(--accent); color: var(--muted); }
+.rich code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background: color-mix(in srgb, var(--text) 10%, transparent); padding: 0.05em 0.3em; border-radius: 4px; }
+.rich.align-center { text-align: center; }
+.rich.align-center ul, .rich.align-center ol { list-style-position: inside; padding-left: 0; }
+.rich.style-callout { border-left: 0.22em solid var(--accent); padding-left: 0.85em; }
+.rich.style-alert { background: color-mix(in srgb, var(--bad) 16%, transparent); border: 2px solid color-mix(in srgb, var(--bad) 60%, transparent); border-radius: calc(var(--radius) * 0.6); padding: 0.75em 0.9em; font-weight: 700; }
+.rich.style-big { font-size: 1.35em; font-weight: 800; line-height: 1.25; letter-spacing: -0.01em; }
+.stories.numbered { counter-reset: n; }
+.stories.numbered li { counter-increment: n; padding-left: 1.6em; }
+.stories.numbered li::before { content: counter(n) "."; background: none !important; transform: none; width: auto; height: auto; top: 0; font-weight: 800; color: var(--accent); }
+.mpage .stories li { font-size: 0.9em; }
+
+/* Stat tiles */
+.stats { display: grid; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); gap: 0.5em; }
+.stats.align-center { text-align: center; }
+.stat { background: color-mix(in srgb, var(--text) 6%, transparent); border-radius: calc(var(--radius) * 0.6); padding: 0.7em 0.75em; min-width: 0; }
+.stat-v { font-size: 1.7em; font-weight: 900; color: var(--accent); line-height: 1.05; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.stat.s-good .stat-v { color: var(--good); }
+.stat.s-bad .stat-v, .stat.s-record .stat-v { color: var(--bad); }
+.stat.s-gold .stat-v { color: #e3b341; }
+.stat.s-muted .stat-v { color: var(--muted); }
+.stat.s-note .stat-v { color: var(--accent2); }
+.stat-l { font-size: 0.8em; font-weight: 700; margin-top: 0.25em; }
+.stat small { display: block; font-size: 0.7em; margin-top: 0.1em; }
+
+/* Tables */
+.mpage .tbl td { font-size: 0.86em; }
+.mpage .tbl th { font-size: 0.56em; }
+.tbl.striped tbody tr:nth-child(odd) td { background: color-mix(in srgb, var(--text) 4%, transparent); }
+
+/* Image, embed, quote */
+.mimg { margin: 0; }
+.mimg img { display: block; width: 100%; height: auto; }
+.mimg img.rounded { border-radius: calc(var(--radius) * 0.7); }
+.mimg figcaption { color: var(--muted); font-size: 0.75em; margin-top: 0.45em; text-align: center; }
+.membed { width: 100%; border-radius: calc(var(--radius) * 0.7); overflow: hidden; background: #000; }
+.membed iframe { width: 100%; height: 100%; border: 0; display: block; }
+.mquote { margin: 0; }
+.mquote blockquote { font-size: 1.15em; font-weight: 700; color: var(--text); font-style: italic; margin-bottom: 0.4em; }
+.mquote figcaption { color: var(--muted); font-size: 0.8em; }
+.mquote.align-center { text-align: center; }
+.mquote.align-center blockquote { border-left: none; padding-left: 0; }
+
+/* Buttons */
+.mbtns { display: grid; gap: 0.5em; }
+.mbtns.row { grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+.mbtn { display: block; text-align: center; text-decoration: none; font-weight: 800; padding: 0.8em 1em; border-radius: calc(var(--radius) * 0.7); font-size: 0.92em; }
+.mbtns.filled .mbtn { background: var(--accent); color: var(--bg); }
+.mbtns.outline .mbtn { border: 2px solid var(--accent); color: var(--accent); }
+.mbtns.plain .mbtn { padding: 0.3em; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+
+/* Expandable list */
+.accs { display: grid; }
+.acc { border-top: 1px solid color-mix(in srgb, var(--text) 10%, transparent); }
+.acc:first-child { border-top: none; }
+.acc summary { cursor: pointer; font-weight: 700; padding: 0.6em 0; list-style: none; display: flex; justify-content: space-between; gap: 1em; font-size: 0.92em; }
+.acc summary::-webkit-details-marker { display: none; }
+.acc summary::after { content: "+"; color: var(--accent); font-weight: 900; }
+.acc[open] summary::after { content: "−"; }
+.acc div { padding: 0 0 0.75em; color: var(--muted); font-size: 0.86em; line-height: 1.45; }
+
+/* Divider */
+.mdiv i { display: block; }
+.mdiv.line i { height: 2px; border-radius: 2px; background: var(--div, color-mix(in srgb, var(--text) 14%, transparent)); }
+.mdiv.dots i { height: 4px; background: radial-gradient(circle, var(--div, var(--muted)) 1.5px, transparent 2px) center / 12px 4px repeat-x; }
+
+/* League sections on a phone */
+.mpage .pick-board { grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr)); }
+.mpage .mu { font-size: 0.9em; gap: 0.4em; }
+.mpage .mu-score { min-width: 3.8em; }
+.mpage .mw-name { font-size: 1.2em; }
+.mpage .records { grid-template-columns: 1fr; }
+.mhtml { overflow-wrap: anywhere; }
+.mhtml img { max-width: 100%; height: auto; }
+.mpage .tbl th { padding: 0 0.3em 0.6em; }
+.mpage .tbl td { padding: 0.45em 0.3em; }
+.mpage .tbl .c-rank { width: 1.3em; }
+.mpage .odds { min-width: 0; padding: 0.1em 0.3em; }
+@container (max-width: 360px) { .mpage .tbl td { font-size: 0.8em; } .mpage .tbl .c-team { font-size: 0.9em; } }
+/* Half-width cards: big numbers shrink with the card instead of spilling out */
+.mpage .pool-amt { font-size: clamp(1.3em, 15cqi, 2.3em); }
+.mpage .dl-big { font-size: clamp(1.2em, 13cqi, 2.1em); }
+.mpage .pk-top { flex-wrap: wrap; }
+.mpage .pk-top b { order: 2; flex-basis: 100%; }
+.mpage .pk-no { order: 1; }
+
+/* ============ Apple style (page setting) ============
+   Same layout and colors, with iOS materials: frosted cards, hairline separators,
+   continuous corners, softer headers and springy press feedback. */
+.mpage.apple { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; letter-spacing: -0.008em; }
+.mpage.apple .mblk {
+  background: color-mix(in srgb, var(--card) 74%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  backdrop-filter: blur(24px) saturate(170%);
+  border: 0.5px solid color-mix(in srgb, var(--text) 10%, transparent);
+  border-radius: calc(var(--radius) * 1.25);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.06), 0 8px 24px -12px rgba(0, 0, 0, 0.35);
+  transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2), box-shadow 0.35s ease;
+}
+.mpage.apple .mblk.no-card { background: transparent; border-color: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.mpage.apple details.mblk:active, .mpage.apple .mbtn:active, .mpage.apple .acc summary:active { transform: scale(0.975); }
+.mpage.apple .blk-title { letter-spacing: 0.06em; font-weight: 700; }
+.mpage.apple .blk-title::before { width: 0.9em; border-radius: 99px; }
+.mpage.apple .tbl td, .mpage.apple .acc, .mpage.apple .mu, .mpage.apple .mw-lines td, .mpage.apple .mw-lines th {
+  border-top-width: 0.5px;
+  border-top-color: color-mix(in srgb, var(--text) 13%, transparent);
+}
+.mpage.apple .mbtn { border-radius: 999px; transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2), filter 0.2s; }
+.mpage.apple .mbtns.filled .mbtn:active { filter: brightness(0.9); }
+.mpage.apple .stat, .mpage.apple .pos-card, .mpage.apple .trade, .mpage.apple .records li { border-radius: calc(var(--radius) * 0.8); }
+.mpage.apple .pk { border-radius: 0.75em; }
+.mpage.apple .acc summary { transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+.mpage.apple .acc summary::after { content: "›"; font-size: 1.3em; line-height: 0.8; transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+.mpage.apple .acc[open] summary::after { content: "›"; transform: rotate(90deg); }
+.mpage.apple details.mblk > summary::after { content: "›"; transform: rotate(90deg); transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+.mpage.apple details.mblk:not([open]) > summary::after { transform: rotate(0deg); }
+.mpage.apple .mnav { background: color-mix(in srgb, var(--bg) 70%, transparent); -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%); border-bottom: 0.5px solid color-mix(in srgb, var(--text) 12%, transparent); }
+.mpage.apple .mnav a { font-weight: 600; background: color-mix(in srgb, var(--text) 8%, transparent); transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+.mpage.apple .mnav a:active { transform: scale(0.94); }
+.mpage.apple .odds { border-radius: 99px; }
+
+/* Fade-in on scroll (page setting; the exported page's script adds .rv / .in) */
+.mpage.reveal .mblk.rv { opacity: 0; transform: translateY(18px) scale(0.985); transition: opacity 0.7s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+.mpage.reveal .mblk.rv.in { opacity: 1; transform: none; }
+/* Apple style: colored text lines ("(red) …") get a faint glow of their own color when the section has no card */
+.mpage.apple .mblk.no-card .tc { text-shadow: 0 0 12px color-mix(in srgb, var(--tc) 30%, transparent), 0 0 2px color-mix(in srgb, var(--tc) 18%, transparent); }
+
+</style>
+</head>
+<body>
+<div class="mpage bg-glow apple reveal" style="--base:16px;--radius:16px;--gap:12px;--pad:14px;--maxw:560px;--font:-apple-system, BlinkMacSystemFont, SF Pro Display, Segoe UI, Roboto, Helvetica, Arial, sans-serif;--hfont:-apple-system, BlinkMacSystemFont, SF Pro Display, Segoe UI, Roboto, Helvetica, Arial, sans-serif;--bg:#0b1020;--bg2:#1b2a55;--card:#141b31;--text:#f3f5fb;--muted:#93a0bf;--accent:#f5b83d;--accent2:#4fd1c5;--good:#4ade80;--bad:#f87171"><main class="mpage-inner"><section id="s-hwja7i8k" class="blk mblk blk-hero no-card" style="--scale:1"><div class="blk-body"><div class="hero align-left">
+        <div class="hdr-kicker">Booty Lickers Unite · 2026</div>
+        <div class="hero-h" style="--hs:1">Weekly Recap</div>
+        <div class="hdr-sub">Week 9</div>
+      </div></div></section><section id="s-xzxyg1uu" class="blk mblk blk-pool half" style="--scale:1"><h2 class="blk-title">The Pool</h2><div class="blk-body"><div class="pool"><div class="pool-amt">$429.30</div><div class="pool-sub">up $79.30 since the 2025 Startup draft</div></div></div></section><section id="s-bhg3tfmt" class="blk mblk blk-deadline half" style="--scale:1"><h2 class="blk-title">Trade Deadline</h2><div class="blk-body"><div class="deadline"><div class="dl-big" data-deadline="2026-11-26T13:00:00-05:00">16d 5h 22m</div>
+        <div class="dl-sub">Thu, Nov 26, 12:00 PM CST</div><small></small></div></div></section><section id="s-4vhwb6us" class="blk mblk blk-richtext" style="--scale:1"><h2 class="blk-title">Storylines</h2><div class="blk-body"><div class="rich style-plain align-left"><ul><li><span class="tc" style="color:var(--good);--tc:var(--good)"><b>Henry</b></span> overtakes <span class="tc" style="color:var(--bad);--tc:var(--bad)"><b>Josh</b></span> in the standings, 5 teams are still at least .500</li><li><span class="tc" style="color:var(--bad);--tc:var(--bad)"><b>Antonio</b></span> has been eliminated from playoff contention</li></ul></div></div></section><section id="s-txj9t4ye" class="blk mblk blk-standings" style="--scale:1"><h2 class="blk-title">Standings</h2><div class="blk-body"><table class="tbl">
+        <thead><tr><th class="c-rank">#</th><th>Team</th><th class="num">Record</th><th class="num">Overall</th><th class="num">PF</th><th class="num">Playoffs</th></tr></thead>
+        <tbody><tr class=""><td class="c-rank">1</td><td class="c-team">Yajat</td><td class="num">7-1</td><td class="num">43-11</td><td class="num">2,157.94</td><td class="num"><span class="odds"><i style="width:99.94%"></i><b>99.94%</b></span></td></tr><tr class=""><td class="c-rank">2</td><td class="c-team">Travis</td><td class="num">5-2</td><td class="num">38-16</td><td class="num">2,171.62</td><td class="num"><span class="odds"><i style="width:91.66%"></i><b>91.66%</b></span></td></tr><tr class=""><td class="c-rank">3</td><td class="c-team">Derek</td><td class="num">5-3</td><td class="num">42-12</td><td class="num">2,227.36</td><td class="num"><span class="odds"><i style="width:83.02%"></i><b>83.02%</b></span></td></tr><tr class=""><td class="c-rank">4</td><td class="c-team">Henry</td><td class="num">4-3</td><td class="num">29-25</td><td class="num">1,970.82</td><td class="num"><span class="odds"><i style="width:70.03%"></i><b>70.03%</b></span></td></tr><tr class="cut"><td colspan="6"><span>Outside the cut</span></td></tr><tr class=""><td class="c-rank">5</td><td class="c-team">Josh</td><td class="num">4-4</td><td class="num">23-31</td><td class="num">1,837.24</td><td class="num"><span class="odds"><i style="width:52.15%"></i><b>52.15%</b></span></td></tr><tr class=""><td class="c-rank">6</td><td class="c-team">Caden</td><td class="num">2-6</td><td class="num">8-46</td><td class="num">1,502.06</td><td class="num"><span class="odds"><i style="width:3.2%"></i><b>3.20%</b></span></td></tr><tr class=""><td class="c-rank">7</td><td class="c-team">Antonio</td><td class="num">0-8</td><td class="num">6-48</td><td class="num">1,461.98</td><td class="num"><span class="odds out"><i style="width:100%"></i><b>0%</b></span></td></tr></tbody>
+      </table></div></section><section id="s-1vx41ezw" class="blk mblk blk-maxpf" style="--scale:1"><h2 class="blk-title">Max PF Leaderboard</h2><div class="blk-body"><ol class="bar-list"><li class="">
+            <span class="rank">1</span>
+            <div class="bar-main"><div class="bar-line"><b>Travis</b><em><span class="pf-of">2,171.62 /</span> 2,650.50</em></div>
+              <div class="bar"><i style="width:100%"></i><i class="pf" style="width:81.93246557253347%"></i></div>
+              
+            </div></li><li class="">
+            <span class="rank">2</span>
+            <div class="bar-main"><div class="bar-line"><b>Derek</b><em><span class="pf-of">2,227.36 /</span> 2,631.88</em></div>
+              <div class="bar"><i style="width:99.29749103942652%"></i><i class="pf" style="width:84.03546500660252%"></i></div>
+              
+            </div></li><li class="">
+            <span class="rank">3</span>
+            <div class="bar-main"><div class="bar-line"><b>Yajat</b><em><span class="pf-of">2,157.94 /</span> 2,587.84</em></div>
+              <div class="bar"><i style="width:97.63591775136767%"></i><i class="pf" style="width:81.41633654027542%"></i></div>
+              
+            </div></li><li class="">
+            <span class="rank">4</span>
+            <div class="bar-main"><div class="bar-line"><b>Henry</b><em><span class="pf-of">1,970.82 /</span> 2,268.48</em></div>
+              <div class="bar"><i style="width:85.58687040181098%"></i><i class="pf" style="width:74.35653650254669%"></i></div>
+              
+            </div></li><li class="">
+            <span class="rank">5</span>
+            <div class="bar-main"><div class="bar-line"><b>Josh</b><em><span class="pf-of">1,837.24 /</span> 2,092.94</em></div>
+              <div class="bar"><i style="width:78.96396906244105%"></i><i class="pf" style="width:69.31673269194492%"></i></div>
+              
+            </div></li><li class="">
+            <span class="rank">6</span>
+            <div class="bar-main"><div class="bar-line"><b>Antonio</b><em><span class="pf-of">1,461.98 /</span> 1,821.52</em></div>
+              <div class="bar"><i style="width:68.72363704961329%"></i><i class="pf" style="width:55.15864931145067%"></i></div>
+              
+            </div></li><li class="">
+            <span class="rank">7</span>
+            <div class="bar-main"><div class="bar-line"><b>Caden</b><em><span class="pf-of">1,502.06 /</span> 1,774.78</em></div>
+              <div class="bar"><i style="width:66.96019618939822%"></i><i class="pf" style="width:56.67081682701377%"></i></div>
+              
+            </div></li></ol></div></section><section id="s-c86oddi8" class="blk mblk blk-weeklyHighs" style="--scale:1"><h2 class="blk-title">Week 9 Highs</h2><div class="blk-body"><h4>Players</h4><ol class="rank-list"><li><b>Kenneth Walker III</b><span class="muted">RB</span><em>36.30</em></li><li><b>Jordan Love</b><span class="muted">QB</span><em>36.18</em></li><li><b>C.J. Stroud</b><span class="muted">QB</span><em>35.36</em></li><li><b>Puka Nacua</b><span class="muted">WR</span><em>35.00</em></li><li><b>CeeDee Lamb</b><span class="muted">WR</span><em>33.50</em></li></ol><div class="pos-grid"><div class="pos-card"><span class="pos-tag">QB</span><b>Jordan Love</b><small></small><em>36.18</em></div><div class="pos-card"><span class="pos-tag">RB</span><b>Kenneth Walker III</b><small></small><em>36.30</em></div><div class="pos-card"><span class="pos-tag">WR</span><b>Puka Nacua</b><small></small><em>35.00</em></div><div class="pos-card"><span class="pos-tag">TE</span><b>Brock Bowers</b><small></small><em>22.30</em></div></div></div></section><section id="s-vh36ijp9" class="blk mblk blk-motw" style="--scale:1"><h2 class="blk-title">Matchup of the Week</h2><div class="blk-body"><div class="motw">
+        <div class="mw-head"><div class="mw-team l" style="--team:#d8789a">
+          <div class="mw-name">Derek</div>
+          <div class="mw-meta">#3 · 5-3 · L2</div>
+        </div><div class="mw-vs">VS</div><div class="mw-team r" style="--team:#a895e3">
+          <div class="mw-name">Josh</div>
+          <div class="mw-meta">#5 · 4-4 · L1</div>
+        </div></div>
+        <table class="mw-lines"><tbody><tr><td class="num">2,227.36</td><th>Points for</th><td class="num">1,837.24</td></tr><tr><td class="num">83.02%</td><th>Playoff odds</th><td class="num">52.15%</td></tr><tr><td class="num">95.36%</td><th>With a win</th><td class="num">69.65%</td></tr><tr><td class="num">70.60%</td><th>With a loss</th><td class="num">34.56%</td></tr></tbody></table>
+        <div class="mw-notes"><div>Last meeting: Derek won 267.96–172.56 (2025 Wk 9)</div></div>
+        
+      </div></div></section><section id="s-tdsk66uq" class="blk mblk blk-spacer no-card" style="--scale:1"><div class="blk-body"><div class="mdiv space" style="padding:100px 0;"><i></i></div></div></section><section id="s-ketmj47k" class="blk mblk blk-richtext no-card" style="--scale:1"><div class="blk-body"><div class="rich style-plain align-center"><p><span style="font-size:32px;line-height:1.2"><b>Record Book</b></span></p></div></div></section><section id="s-asjyp68y" class="blk mblk blk-richtext no-card" style="--scale:1"><div class="blk-body"><div class="rich style-plain align-center"><p><span class="tc" style="font-size:64px;line-height:1.2;color:var(--good);--tc:var(--good)"><b>4</b></span><br><b>Consecutive Weekly High Scores</b><br><i>Travis</i><br><i>Next Best: Multiple with 2</i></p></div></div></section><section id="s-8fyylvfj" class="blk mblk blk-richtext no-card" style="--scale:1"><div class="blk-body"><div class="rich style-plain align-center"><p><span class="tc" style="font-size:64px;line-height:1.2;color:var(--bad);--tc:var(--bad)"><b>9</b></span><br><b>Losses in a row</b><br><i>Antonio</i><br><i>Next Best: Caden with 7 (Non-active)</i></p></div></div></section><section id="s-btvmuppr" class="blk mblk blk-richtext no-card" style="--scale:1"><div class="blk-body"><div class="rich style-plain align-center"><p><span class="tc" style="font-size:64px;line-height:1.2;color:var(--good);--tc:var(--good)"><b>15</b></span><br><b>Consecutive Weeks Above 200</b><br><i>Yajat</i><br><i>Next Best: Derek with 11 (Non-active)</i></p></div></div></section><section id="s-8uwf3tp6" class="blk mblk blk-richtext no-card" style="--scale:1"><div class="blk-body"><div class="rich style-plain align-center"><p><span class="tc" style="font-size:64px;line-height:1.2;color:var(--bad);--tc:var(--bad);font-weight:700">10</span><br><span style="font-weight:700">Consecutive Weeks Below 200</span><br><span style="font-style:italic">Caden</span><br><span style="font-style:italic">Next Best: Antonio with 8 (Active)</span></p></div></div></section><section id="s-lcfx61vc" class="blk mblk blk-spacer no-card" style="--scale:1"><div class="blk-body"><div class="mdiv space" style="padding:100px 0;"><i></i></div></div></section><section id="s-ext62jia" class="blk mblk blk-results" style="--scale:1"><h2 class="blk-title">Week 9 Results</h2><div class="blk-body"><div class="matchups"><div class="mu"><div class="mu-team l win"><b>Travis</b><small>5-2</small></div><div class="mu-score win">253.40</div><div class="mu-dash">–</div><div class="mu-score">113.78</div><div class="mu-team r"><b>Antonio</b><small>0-8</small></div></div><div class="mu"><div class="mu-team l"><b>Josh</b><small>4-4</small></div><div class="mu-score">181.16</div><div class="mu-dash">–</div><div class="mu-score win">222.46</div><div class="mu-team r win"><b>Henry</b><small>4-3</small></div></div><div class="mu"><div class="mu-team l"><b>Derek</b><small>5-3</small></div><div class="mu-score">201.72</div><div class="mu-dash">–</div><div class="mu-score win">232.24</div><div class="mu-team r win"><b>Yajat</b><small>7-1</small></div></div><div class="mu bye"><div class="mu-team l"><b>Caden</b><small>2-6</small></div><div class="mu-score">150.56</div><div class="mu-dash">·</div><div class="mu-score muted">BYE</div><div class="mu-team r"><small>No result, PF only</small></div></div></div></div></section><section id="s-4609g7ei" class="blk mblk blk-upcoming" style="--scale:1"><h2 class="blk-title">Week 10 Matchups</h2><div class="blk-body"><ol class="upcoming"><li class="up"><b>Travis</b><span class="h2h">(1-1)</span><span class="r"><b>Yajat</b></span></li><li class="up"><b>Derek</b><span class="h2h">(2-0)</span><span class="r"><b>Josh</b></span></li><li class="up"><b>Henry</b><span class="h2h">(2-1)</span><span class="r"><b>Caden</b></span></li><li class="up bye"><b>Antonio</b><span class="h2h muted">BYE</span><span></span></li></ol><small class="note">Records are all-time regular-season head-to-head.</small></div></section><section id="s-1fo2amxn" class="blk mblk blk-picks" style="--scale:1"><h2 class="blk-title">2027 Draft Board — If the Season Ended Today</h2><div class="blk-body"><div class="pick-board one" style="--cols:1"><div class="pk" style="--pk:#6faad8">
+              <div class="pk-top"><b>Caden</b><span class="pk-no">1.01</span></div>
+              <div class="pk-sub">2-6 · #6</div>
+              <div class="pk-foot"><span class="pk-arrow">→</span></div>
+            </div><div class="pk" style="--pk:#7fcba4">
+              <div class="pk-top"><b>Antonio</b><span class="pk-no">1.02</span></div>
+              <div class="pk-sub">0-8 · #7</div>
+              <div class="pk-foot"><span class="pk-arrow">→</span></div>
+            </div><div class="pk" style="--pk:#a895e3">
+              <div class="pk-top"><b>Josh</b><span class="pk-no">1.03</span></div>
+              <div class="pk-sub">4-4 · #5</div>
+              <div class="pk-foot"><span class="pk-arrow">→</span></div>
+            </div><div class="pk" style="--pk:#6faad8">
+              <div class="pk-top"><b>Caden</b><span class="pk-no">1.04</span></div>
+              <div class="pk-sub">4-3 · #4</div>
+              <div class="pk-foot"><span class="pk-arrow">→</span><span class="pk-pill">From Henry</span></div>
+            </div><div class="pk" style="--pk:#6faad8">
+              <div class="pk-top"><b>Caden</b><span class="pk-no">1.05</span></div>
+              <div class="pk-sub">5-3 · #3</div>
+              <div class="pk-foot"><span class="pk-arrow">→</span><span class="pk-pill">From Derek</span></div>
+            </div><div class="pk" style="--pk:#6faad8">
+              <div class="pk-top"><b>Caden</b><span class="pk-no">1.06</span></div>
+              <div class="pk-sub">5-2 · #2</div>
+              <div class="pk-foot"><span class="pk-arrow">→</span><span class="pk-pill">From Travis</span></div>
+            </div><div class="pk" style="--pk:#62c6c4">
+              <div class="pk-top"><b>Travis</b><span class="pk-no">1.07</span></div>
+              <div class="pk-sub">7-1 · #1</div>
+              <div class="pk-foot"><span class="pk-arrow">→</span><span class="pk-pill">From Yajat</span></div>
+            </div></div></div></section><section id="s-zodhuf2c" class="blk mblk blk-buttons no-card" style="--scale:1"><div class="blk-body"><div class="mbtns filled stack"><a class="mbtn" href="https://sleeper.com/leagues/1311995439410581504" target="_blank" rel="noopener">Open Sleeper</a></div></div></section><section id="s-ixavfr03" class="blk mblk blk-spacer no-card" style="--scale:1"><div class="blk-body"><div class="mdiv space" style="padding:32px 0;"><i></i></div></div></section></main></div>
+<script>(function(){function t(){document.querySelectorAll('[data-deadline]').forEach(function(e){var ms=new Date(e.dataset.deadline)-Date.now();if(!(ms>0)){e.textContent=e.dataset.passed||'';return}var d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.floor(ms%36e5/6e4);e.textContent=d?d+'d '+h+'h '+m+'m':h+'h '+m+'m'})}t();setInterval(t,30000)})();</script>
+<script>(function smoothScroll(box, amount) {
+  var el = box || document.scrollingElement || document.documentElement;
+  var host = box || window;
+  var a = 0;
+  var cur = 0;
+  var target = 0;
+  var running = false;
+  var last = 0;
+  var raf = 0;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var touch = { mode: null, x: 0, y: 0, lastY: 0, lastT: 0, v: 0 };
+  // Fraction of the remaining distance covered per 60 Hz frame.
+  function ease() {
+    return 0.12 - 0.1 * a;
+  }
+  // Decay rate per millisecond, so a flick hands off to the glide at the same speed.
+  function rate() {
+    return -Math.log(1 - ease()) / 16.67;
+  }
+  function clamp(v) {
+    return Math.max(0, Math.min(el.scrollHeight - el.clientHeight, v));
+  }
+  function tick(now) {
+    var k = 1 - Math.pow(1 - ease(), Math.min(64, now - last) / 16.67);
+    last = now;
+    cur += (target - cur) * k;
+    if (Math.abs(target - cur) < 0.5) {
+      cur = target;
+      running = false;
+    }
+    el.scrollTop = cur;
+    if (running) raf = requestAnimationFrame(tick);
+  }
+  function go() {
+    if (running) return;
+    running = true;
+    last = performance.now();
+    raf = requestAnimationFrame(tick);
+  }
+  function stop() {
+    running = false;
+    cancelAnimationFrame(raf);
+    cur = target = el.scrollTop;
+  }
+  function on() {
+    return a > 0 && !reduce;
+  }
+  host.addEventListener('scroll', function () {
+    if (!running) cur = target = el.scrollTop;
+  }, { passive: true });
+  host.addEventListener('wheel', function (e) {
+    if (!on() || e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    e.preventDefault();
+    if (!running) cur = target = el.scrollTop;
+    target = clamp(target + e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? el.clientHeight : 1));
+    go();
+  }, { passive: false });
+  host.addEventListener('touchstart', function (e) {
+    touch.mode = on() && e.touches.length === 1 ? null : 'native';
+    if (touch.mode) return;
+    stop();
+    touch.x = e.touches[0].clientX;
+    touch.y = touch.lastY = e.touches[0].clientY;
+    touch.lastT = performance.now();
+    touch.v = 0;
+  }, { passive: true });
+  host.addEventListener('touchmove', function (e) {
+    if (touch.mode === 'native') return;
+    var t = e.touches[0];
+    if (!touch.mode) {
+      var dx = Math.abs(t.clientX - touch.x);
+      var dy = Math.abs(t.clientY - touch.y);
+      if (dx < 4 && dy < 4) return;
+      // Sideways swipes (jump menu, wide tables) keep their normal scrolling.
+      touch.mode = dx > dy ? 'native' : 'drag';
+      if (touch.mode === 'native') return;
+    }
+    e.preventDefault();
+    var now = performance.now();
+    var d = touch.lastY - t.clientY;
+    cur = target = clamp(cur + d);
+    el.scrollTop = cur;
+    touch.v = 0.2 * touch.v + 0.8 * (d / Math.max(1, now - touch.lastT));
+    touch.lastY = t.clientY;
+    touch.lastT = now;
+  }, { passive: false });
+  host.addEventListener('touchend', function () {
+    if (touch.mode !== 'drag') return;
+    touch.mode = null;
+    if (performance.now() - touch.lastT > 80) touch.v = 0;
+    target = clamp(cur + touch.v / rate());
+    go();
+  });
+  // Jump-menu links glide too.
+  (box || document).addEventListener('click', function (e) {
+    var link = on() && e.target.closest && e.target.closest('a[href^="#"]');
+    var dest = link && link.getAttribute('href').length > 1 && document.getElementById(link.getAttribute('href').slice(1));
+    if (!dest) return;
+    e.preventDefault();
+    if (!running) cur = el.scrollTop;
+    var top = dest.getBoundingClientRect().top - (box ? box.getBoundingClientRect().top : 0);
+    target = clamp(el.scrollTop + top - (parseFloat(getComputedStyle(dest).scrollMarginTop) || 0));
+    go();
+  });
+  var api = {
+    set: function (n) {
+      a = Math.max(0, Math.min(1, Number(n) || 0));
+    },
+  };
+  api.set(amount);
+  return api;
+})(null, 0.35);</script>
+<script>(function(){if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px'});document.querySelectorAll('.mpage.reveal .mblk').forEach(function(el){if(el.getBoundingClientRect().top>innerHeight){el.classList.add('rv');io.observe(el)}})})();</script>
+</body>
+</html>
