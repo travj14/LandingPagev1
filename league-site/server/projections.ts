@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import type { Express, Request, Response } from 'express';
 import { LEAGUE_ID, OWNER_NAMES } from './config.ts';
+import { optimalPoints, SLOT_ELIGIBILITY } from './history.ts';
 import { get, getPlayers } from './sleeper.ts';
 import type { PlayerInfo, SleeperLeague, SleeperMatchup, SleeperRoster, SleeperState, SleeperUser } from './types.ts';
 
@@ -29,6 +30,7 @@ const AUTO_MS = 10 * MIN;
 const COOLDOWN_MS = MIN;
 const SIMS = 100_000;
 const ODDS_RUNS = 20_000;
+const MAX_SIMS = 20_000; // runs for this week's simulated max PF (a best lineup per run, so heavier than SIMS)
 const NEIGHBORS = 200;
 // Statuses that end a player's day: what's already scored stays, the rest of the projection goes to 0.
 const RULED_OUT = new Set(['Out', 'IR', 'Doubtful', 'Sus', 'PUP']);
@@ -262,8 +264,14 @@ export interface LeagueOut {
     through: number;
     final: boolean;
     playoffTeams: number;
-    rows: { rid: number; name: string; owner: string; avatar: string | null; w: number; l: number; t: number; pf: number; pa: number; playoff: number; last: number }[];
+    rows: { rid: number; name: string; owner: string; avatar: string | null; w: number; l: number; t: number; pf: number; pa: number; maxpf: number; playoff: number; last: number }[];
   };
+  // Where each team ends up once this week is played: record plus this week's win chances, and
+  // PF / PA / max PF plus this week's projected scores. Null when no week is in progress.
+  projected: {
+    week: number;
+    rows: { rid: number; name: string; owner: string; avatar: string | null; w: number; l: number; t: number; pf: number; pa: number; maxpf: number }[];
+  } | null;
   notes: string[];
 }
 
@@ -315,7 +323,7 @@ async function buildLeague(def: (typeof PROJECTION_LEAGUES)[number]): Promise<Le
   const current = byWeek[week - 1] ?? [];
   let snapChanged = false;
   for (const m of current) {
-    for (const pid of m.starters ?? []) {
+    for (const pid of new Set([...(m.starters ?? []), ...(m.players ?? [])])) {
       const p = proj[pid];
       const g = games.get(p?.team ?? players[pid]?.team ?? '');
       if (p && (!g || g.state === 'pre')) {
@@ -327,6 +335,37 @@ async function buildLeague(def: (typeof PROJECTION_LEAGUES)[number]): Promise<Le
   if (snapChanged) await saveSnapshot(snapName).catch((err) => console.warn('Projections: snapshot not saved:', err.message));
 
   const leagueScore = (stats: Record<string, number>) => Object.entries(stats).reduce((t, [k, v]) => t + (scoring[k] != null ? v * scoring[k] : 0), 0);
+
+  // How one player's final score is drawn. Fixed at what he has when his game is over, he has no game
+  // this week, he's ruled out (latest status, not the kickoff snapshot), or there's no projection / a
+  // position we don't model. Otherwise one pregame-distribution draw v gives the final score: offense and
+  // K add the unplayed share of v to what they have; DEF blends from its provisional score toward v.
+  const model = (pid: string, pts: number) => {
+    const meta: PlayerInfo | undefined = players[pid];
+    const live = proj[pid];
+    const nflTeam = live?.team ?? meta?.team ?? null;
+    const g = nflTeam ? games.get(nflTeam) : undefined;
+    const pos = meta?.pos || (/^[A-Z]{2,3}$/.test(pid) ? 'DEF' : '');
+    const base = { meta, live, nflTeam, g, pos, fixed: pts as number | null, dist: null as Dist | null, at: null as ReturnType<typeof aliasTable> | null, fin: (v: number) => v };
+    if (!g || g.state === 'post') return base;
+    const line = (g.state === 'pre' ? live : snap[pid] ?? live) ?? null;
+    const target = line ? leagueScore(line.stats) : 0;
+    const q = line?.ppr ?? target;
+    // A player listed at another position (e.g. a DB who plays WR) uses his first fantasy position's pool.
+    const poolPos = pools.pools[pos] ? pos : (meta?.positions ?? []).find((p) => pools.pools[p]) ?? pos;
+    const pool = pools.pools[poolPos];
+    if (!pool || !(target > 0) || !(q > 0) || RULED_OUT.has(live?.inj ?? '')) return base;
+    const dist = calibrated(def.key, poolPos, pool, round2(q), round2(target));
+    const f = g.state === 'pre' ? 1 : g.left;
+    const fin = poolPos === 'DEF' ? (v: number) => (1 - f) * pts + f * v : (v: number) => (g.state === 'pre' ? v : pts + f * v);
+    return { ...base, fixed: null, dist, at: aliasTable(dist.weights), fin };
+  };
+  type Model = ReturnType<typeof model>;
+  const draw = (x: Model, r: () => number) => {
+    const u = r() * x.at!.n;
+    const j = Math.floor(u);
+    return x.fin(x.dist!.values[u - j < x.at!.prob[j] ? j : x.at!.alias[j]]);
+  };
 
   // --- This week's matchups -------------------------------------------------
   const rand = mulberry32(42 + week);
@@ -344,48 +383,22 @@ async function buildLeague(def: (typeof PROJECTION_LEAGUES)[number]): Promise<Le
         starters.push({ pid: '0', name: 'Empty slot', pos: '', team: null, inj: null, state: 'empty', game: '', kickoff: null, pts: 0, mean: 0, p10: 0, p90: 0 });
         return;
       }
-      const meta: PlayerInfo | undefined = players[pid];
-      const live = proj[pid];
-      const nflTeam = live?.team ?? meta?.team ?? null;
-      const g = nflTeam ? games.get(nflTeam) : undefined;
       const pts = round2(pp[pid] ?? m.starters_points?.[i] ?? 0);
-      const pos = meta?.pos || (/^[A-Z]{2,3}$/.test(pid) ? 'DEF' : '');
-      const base = { pid, name: meta?.name ?? pid, pos, team: nflTeam, inj: live?.inj ?? null, kickoff: g?.kickoff ?? null, pts };
-      // Final, or no NFL game this week: the score is what it is.
-      if (!g || g.state === 'post') {
+      const x = model(pid, pts);
+      const g = x.g;
+      const base = { pid, name: x.meta?.name ?? pid, pos: x.pos, team: x.nflTeam, inj: x.live?.inj ?? null, kickoff: g?.kickoff ?? null, pts };
+      if (x.fixed != null) {
         locked += pts;
         mean += pts;
-        starters.push({ ...base, state: g ? 'post' : 'bye', game: g ? 'Final' : 'Bye', mean: pts, p10: pts, p90: pts });
+        starters.push({ ...base, state: g ? g.state : 'bye', game: !g ? 'Bye' : g.state === 'post' ? 'Final' : g.label, mean: pts, p10: pts, p90: pts });
         return;
       }
-      const line = (g.state === 'pre' ? live : snap[pid] ?? live) ?? null;
-      const target = line ? leagueScore(line.stats) : 0;
-      const q = line?.ppr ?? target;
-      const pool = pools.pools[pos];
-      if (!pool || !(target > 0) || !(q > 0) || RULED_OUT.has(live?.inj ?? '')) {
-        // Ruled out (before or during the game), or no projection / a position we don't model:
-        // only what's already scored counts. The injury status is the latest from Sleeper, not the kickoff snapshot.
-        locked += pts;
-        mean += pts;
-        starters.push({ ...base, state: g.state, game: g.label, mean: pts, p10: pts, p90: pts });
-        return;
-      }
-      const dist = calibrated(def.key, pos, pool, round2(q), round2(target));
-      // Final score from one pregame-distribution draw v: offense and K add the unplayed share of v to
-      // what they have; DEF blends from its provisional score toward v.
-      const f = g.state === 'pre' ? 1 : g.left;
-      const fin = pos === 'DEF' ? (v: number) => (1 - f) * pts + f * v : (v: number) => (g.state === 'pre' ? v : pts + f * v);
-      const at = aliasTable(dist.weights);
-      for (let k = 0; k < SIMS; k++) {
-        const u = rand() * at.n;
-        const j = Math.floor(u);
-        total[k] += fin(dist.values[u - j < at.prob[j] ? j : at.alias[j]]);
-      }
+      for (let k = 0; k < SIMS; k++) total[k] += draw(x, rand);
       let dm = 0;
-      for (let k = 0; k < dist.values.length; k++) dm += dist.values[k] * dist.weights[k];
-      const pm = fin(dm);
+      for (let k = 0; k < x.dist!.values.length; k++) dm += x.dist!.values[k] * x.dist!.weights[k];
+      const pm = x.fin(dm);
       mean += pm;
-      starters.push({ ...base, state: g.state, game: g.state === 'pre' ? '' : g.label, mean: round1(pm), p10: round1(fin(quantile(dist, 0.1))), p90: round1(fin(quantile(dist, 0.9))) });
+      starters.push({ ...base, state: g!.state, game: g!.state === 'pre' ? '' : g!.label, mean: round1(pm), p10: round1(x.fin(quantile(x.dist!, 0.1))), p90: round1(x.fin(quantile(x.dist!, 0.9))) });
     });
     if (locked) for (let k = 0; k < SIMS; k++) total[k] += locked;
     samples.set(m.roster_id, total);
@@ -439,7 +452,8 @@ async function buildLeague(def: (typeof PROJECTION_LEAGUES)[number]): Promise<Le
   const allFinal = games.size > 0 && [...games.values()].every((g) => g.state === 'post');
   const through = Math.min(regWeeks, allFinal ? week : week - 1);
   const owned = rosters.filter((r) => r.owner_id).map((r) => r.roster_id);
-  const rec = new Map(owned.map((rid) => [rid, { w: 0, l: 0, t: 0, pf: 0, pa: 0 }]));
+  const slots = league.roster_positions ?? [];
+  const rec = new Map(owned.map((rid) => [rid, { w: 0, l: 0, t: 0, pf: 0, pa: 0, maxpf: 0 }]));
   const schedule: { week: number; a: number; b: number; matchupId: number }[] = [];
   for (const w of weeks) {
     if (w > regWeeks) continue;
@@ -451,8 +465,8 @@ async function buildLeague(def: (typeof PROJECTION_LEAGUES)[number]): Promise<Le
       const rx = rec.get(x.roster_id), ry = rec.get(y.roster_id);
       if (w <= through) {
         const px = x.custom_points ?? x.points ?? 0, py = y.custom_points ?? y.points ?? 0;
-        if (rx) rx.pf += px;
-        if (ry) ry.pf += py;
+        if (rx) (rx.pf += px), (rx.maxpf += optimalPoints(x.players ?? [], x.players_points ?? {}, players, slots));
+        if (ry) (ry.pf += py), (ry.maxpf += optimalPoints(y.players ?? [], y.players_points ?? {}, players, slots));
         if (!rx || !ry) continue; // bye: PF only
         rx.pa += py;
         ry.pa += px;
@@ -510,10 +524,76 @@ async function buildLeague(def: (typeof PROJECTION_LEAGUES)[number]): Promise<Le
       t: r.t,
       pf: round2(r.pf),
       pa: round2(r.pa),
+      maxpf: round2(r.maxpf),
       playoff: round2((playoffHits.get(rid)! / runs) * 100),
       last: round2((lastHits.get(rid)! / runs) * 100),
     };
   });
+
+  // --- Projected end of this week -------------------------------------------
+  // This week's max PF, simulated like the matchups: each run draws every roster player's final score
+  // (bench included), takes the best lineup for that run, and we average the runs. A bench player who
+  // booms makes the lineup in the runs where he does, which plugging in averages would miss.
+  // Same slot filling as optimalPoints (most restrictive slot first, best eligible player), with each
+  // player's eligibility worked out once so a run only re-sorts the scores.
+  const slotOrder = slots.filter((x) => SLOT_ELIGIBILITY[x]).sort((x, y) => SLOT_ELIGIBILITY[x].length - SLOT_ELIGIBILITY[y].length);
+  const simMaxPf = (m: SleeperMatchup) => {
+    const pp = m.players_points ?? {};
+    const ids = m.players ?? [];
+    const xs = ids.map((pid) => model(pid, round2(pp[pid] ?? 0)));
+    if (xs.every((x) => x.fixed != null)) return optimalPoints(ids, Object.fromEntries(ids.map((pid, i) => [pid, xs[i].fixed!])), players, slots);
+    const n = ids.length;
+    const elig = slotOrder.map((slot) => ids.map((pid) => (players[pid]?.positions ?? []).some((p) => SLOT_ELIGIBILITY[slot].includes(p))));
+    const r = mulberry32(7 + week * 1000 + m.roster_id);
+    const v = new Float64Array(n);
+    const idx = Array.from({ length: n }, (_, i) => i);
+    const used = new Uint8Array(n);
+    let sum = 0;
+    for (let k = 0; k < MAX_SIMS; k++) {
+      for (let i = 0; i < n; i++) v[i] = xs[i].fixed ?? draw(xs[i], r);
+      idx.sort((a, b) => v[b] - v[a]);
+      used.fill(0);
+      for (const ok of elig) {
+        for (const i of idx) {
+          if (!used[i] && ok[i]) {
+            used[i] = 1;
+            sum += v[i];
+            break;
+          }
+        }
+      }
+    }
+    return sum / MAX_SIMS;
+  };
+  let projected: LeagueOut['projected'] = null;
+  if (week <= regWeeks && through < week) {
+    const add = new Map<number, { w: number; l: number; t: number; pf: number; pa: number; maxpf: number }>();
+    for (const m of current) {
+      if (!rec.has(m.roster_id)) continue;
+      add.set(m.roster_id, { w: 0, l: 0, t: 0, pf: teamOut.get(m.roster_id)?.mean ?? 0, pa: 0, maxpf: simMaxPf(m) });
+    }
+    for (const mu of matchups) {
+      if (mu.bye) continue;
+      const [a, b] = mu.teams;
+      for (const [x, y] of [[a, b], [b, a]]) {
+        const r = add.get(x.rid);
+        if (!r) continue;
+        r.pa = y.mean;
+        r.w = (x.win ?? 0) / 100;
+        r.t = (x.tie ?? 0) / 100;
+        r.l = Math.max(0, 1 - r.w - r.t);
+      }
+    }
+    projected = {
+      week,
+      rows: owned
+        .map((rid) => {
+          const r = rec.get(rid)!, d = add.get(rid) ?? { w: 0, l: 0, t: 0, pf: 0, pa: 0, maxpf: 0 }, info = team.get(rid)!;
+          return { rid, name: info.name, owner: info.owner, avatar: info.avatar, w: round2(r.w + d.w), l: round2(r.l + d.l), t: round2(r.t + d.t), pf: round2(r.pf + d.pf), pa: round2(r.pa + d.pa), maxpf: round2(r.maxpf + d.maxpf) };
+        })
+        .sort((x, y) => y.w + y.t / 2 - (x.w + x.t / 2) || y.pf - x.pf),
+    };
+  }
 
   if (week > regWeeks) notes.push('Playoffs: odds are final from the regular season.');
   return {
@@ -527,6 +607,7 @@ async function buildLeague(def: (typeof PROJECTION_LEAGUES)[number]): Promise<Le
     error: null,
     matchups,
     standings: { through, final, playoffTeams: P, rows },
+    projected,
     notes,
   };
 }

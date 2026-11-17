@@ -62,7 +62,9 @@ async function load<T>(key: string, endpoint: string, ttlMs: number, transform?:
   }
 
   try {
-    const res = await fetch(endpoint.startsWith('http') ? endpoint : BASE + endpoint);
+    // A ttl of 0 means live data: skip Sleeper's CDN too, which can serve copies several minutes old.
+    const url = endpoint.startsWith('http') ? endpoint : BASE + endpoint;
+    const res = await fetch(ttlMs === 0 ? `${url}${url.includes('?') ? '&' : '?'}_=${Date.now()}` : url);
     if (!res.ok) throw new Error(`Sleeper ${endpoint} -> HTTP ${res.status}`);
     const raw = await res.json();
     const value = transform ? transform(raw) : raw;

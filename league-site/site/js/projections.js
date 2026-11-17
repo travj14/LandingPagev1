@@ -142,6 +142,31 @@ function standingsHtml(d) {
     <h2 class="sec-title">Standings <span class="more" style="color:var(--muted)">${through}</span></h2>
     <div style="overflow-x:auto"><table class="tbl pj-stand"><thead><tr><th class="rk">#</th><th class="l">Team</th><th>W-L</th><th>PF</th><th class="pj-pa">PA</th><th>Playoffs</th><th>Last</th></tr></thead><tbody>${rows}</tbody></table></div>
     <p class="note">${s.final ? 'Regular season over: these are final.' : `Top ${s.playoffTeams} make the playoffs. This week's games use the live win chances; later weeks are coin flips.`}</p>
+  </section>${projectedHtml(d)}`;
+}
+
+// Expected record after this week: wins plus this week's win chance, losses plus the loss chance.
+const xrec = (r) => `${fmt1(r.w)}-${fmt1(r.l)}${r.t >= 0.05 ? `-${fmt1(r.t)}` : ''}`;
+
+function projectedHtml(d) {
+  const p = d.projected;
+  if (!p) return '';
+  const rows = p.rows
+    .map(
+      (r, i) => `<tr>
+        <td class="rk">${i + 1}</td>
+        <td class="tm"><div class="pj-sn">${avatar(r)}<span><b>${esc(r.name)}</b><small>${esc(r.owner)}</small></span></div></td>
+        <td>${xrec(r)}</td>
+        <td>${fmt(r.pf)}</td>
+        <td class="pj-pa">${fmt(r.pa)}</td>
+        <td><b>${fmt(r.maxpf)}</b></td>
+      </tr>`,
+    )
+    .join('');
+  return `<section class="card flush">
+    <h2 class="sec-title">Projected <span class="more" style="color:var(--muted)">After week ${p.week}</span></h2>
+    <div style="overflow-x:auto"><table class="tbl pj-stand"><thead><tr><th class="rk">#</th><th class="l">Team</th><th>W-L</th><th>PF</th><th class="pj-pa">PA</th><th>Max PF</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <p class="note">Record adds this week's win and loss chances to the current record. PF and PA add this week's projected scores. Max PF adds this week's best possible lineup, using points so far plus projections for players still to play.</p>
   </section>`;
 }
 

@@ -81,7 +81,7 @@ const MIN = 60e3;
 const HOUR = 60 * MIN;
 
 // Lineup slot -> eligible positions.
-const SLOT_ELIGIBILITY: Record<string, string[]> = {
+export const SLOT_ELIGIBILITY: Record<string, string[]> = {
   QB: ['QB'],
   RB: ['RB'],
   WR: ['WR'],
