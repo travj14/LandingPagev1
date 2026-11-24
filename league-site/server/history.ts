@@ -133,6 +133,27 @@ function computeCurrentWeek(league: SleeperLeague, state: SleeperState, lastWeek
   return Math.min(Math.max(state.week, 1), lastWeek);
 }
 
+// ESPN's word on whether every NFL game of a week is final, so the fantasy week counts as
+// over Monday night rather than when Sleeper rolls to the next week (usually Wednesday).
+const weekFinalMemo = new Map<string, { at: number; final: boolean }>();
+async function nflWeekFinal(season: string, week: number): Promise<boolean> {
+  const key = `${season}-${week}`;
+  const hit = weekFinalMemo.get(key);
+  if (hit && (hit.final || Date.now() - hit.at < 5 * MIN)) return hit.final;
+  let final = false;
+  try {
+    const res = await fetch(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=${season}&seasontype=2&week=${week}`);
+    if (res.ok) {
+      const events: { status?: { type?: { completed?: boolean } } }[] = (await res.json()).events ?? [];
+      final = events.length > 0 && events.every((e) => e.status?.type?.completed);
+    }
+  } catch (err) {
+    console.warn('ESPN scoreboard unavailable, treating the current week as live:', (err as Error).message);
+  }
+  weekFinalMemo.set(key, { at: Date.now(), final });
+  return final;
+}
+
 async function loadSeason(
   league: SleeperLeague,
   state: SleeperState,
@@ -147,6 +168,7 @@ async function loadSeason(
   const playoffTeams = s.playoff_teams || 4;
   const lastWeek = regWeeks + Math.ceil(Math.log2(Math.max(2, playoffTeams)));
   const currentWeek = isCurrent ? computeCurrentWeek(league, state, lastWeek) : lastWeek;
+  const weekOver = isCurrent && !done && currentWeek > 0 && (await nflWeekFinal(league.season, currentWeek));
 
   const weekTtl = (week: number) => {
     if (done) return Infinity;
@@ -241,7 +263,7 @@ async function loadSeason(
         bye,
         playoff: week > regWeeks,
         played: bye ? a.pts > 0 : a.pts > 0 || b.pts > 0,
-        live: isCurrent && !done && week === currentWeek,
+        live: isCurrent && !done && week === currentWeek && !weekOver,
       });
     }
   });

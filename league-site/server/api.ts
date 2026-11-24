@@ -52,7 +52,10 @@ const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').repla
 export async function context(h: History): Promise<Ctx> {
   const cfg = await siteConfig();
   const season = h.current;
-  const completed = season.status === 'complete' ? season.lastWeek : Math.max(0, h.currentWeek - 1);
+  // The current week counts as completed once its games are no longer live (every NFL game final).
+  const curGames = season.games.filter((g) => g.week === h.currentWeek);
+  const curOver = curGames.length > 0 && curGames.every((g) => !g.live);
+  const completed = season.status === 'complete' ? season.lastWeek : curOver ? h.currentWeek : Math.max(0, h.currentWeek - 1);
   const regThrough = Math.min(completed, season.regWeeks);
   const owners = [...season.owners].sort((x, y) => season.ridByOwner.get(x)! - season.ridByOwner.get(y)!);
   const teams = owners.map((id, i) => {
@@ -430,7 +433,7 @@ export async function home(c: Ctx, model: Model) {
   const started = curGames.some((g) => g.a.pts > 0 || g.b.pts > 0);
   const done = c.season.status === 'complete';
   const week = done ? c.season.lastWeek : cur;
-  const status: 'upcoming' | 'live' | 'final' = done ? 'final' : started ? 'live' : 'upcoming';
+  const status: 'upcoming' | 'live' | 'final' = done || c.completed >= cur ? 'final' : started ? 'live' : 'upcoming';
   const games = c.season.games.filter((g) => g.week === week).map((g) => gameOut(c, g));
   const lastResults = status === 'upcoming' && c.completed >= 1 ? c.season.games.filter((g) => g.week === c.completed).map((g) => gameOut(c, g)) : [];
 
